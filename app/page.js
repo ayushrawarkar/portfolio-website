@@ -275,7 +275,7 @@ export default function HomePage() {
               className="text-slate-700 hover:text-pink-600 transition-colors duration-300 relative group"
               whileHover={{ y: -2 }}
             >
-              Examples
+              View Work
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
             </motion.button>
           </div>
