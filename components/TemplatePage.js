@@ -12,39 +12,41 @@ export default function TemplatesPage() {
 
     // Template data with actual image paths
     const templates = [
+       
         {
             id: 1,
-            title: 'Portfolio Template 1',
-            description: 'Clean and professional portfolio template perfect for developers, engineers, and tech professionals.',
-            category: 'Developer',
+            title: 'Developer Portfolio Pro',
+            description: 'Clean, technical portfolio template perfect for developers, engineers, and tech professionals to showcase coding projects.',
             icon: Code,
             image: '/images/templates/templateimage1.jpg',
             liveUrl: 'https://academic-portfolio-ivory-theta.vercel.app/',
-            features: ['Code Display', 'Project Showcase', 'Skills Section'],
+            features: ['Code Display', 'Project Showcases', 'Skills Visualization', 'GitHub Integration'],
             rating: 5,
+            category: 'developer'
         },
         {
             id: 2,
-            title: 'Portfolio Template 2',
-            description: 'Elegant portfolio template designed for designers, artists, and creative professionals.',
-            category: 'Creative',
+            title: 'Personal Portfolio Elegance',
+            description: 'Elegant personal portfolio template designed for designers, artists, and creative professionals.',
             icon: Users,
             image: '/images/templates/template2.jpg',
             liveUrl: 'https://profile-template-iota.vercel.app/',
-            features: ['Gallery Layout', 'Animation Ready', 'Client Testimonials', 'Contact Form'],
+            features: ['Responsive Design', 'Project Gallery', 'About Section', 'Contact Form'],
             rating: 4,
+            category: 'personal'
         },
         {
             id: 3,
-            title: 'Portfolio Template 3',
-            description: 'Professional template suitable for consultants, freelancers, and business professionals.',
-            category: 'Business',
+            title: 'Community Portfolio Hub',
+            description: 'Collaborative platform template for communities, teams, and organizations to showcase collective work.',
             icon: Briefcase,
             image: '/images/templates/template3.jpg',
-            liveUrl: '',
-            features: ['Service Sections', 'Case Studies', 'Team Members', 'Pricing Tables'],
+            liveUrl: 'https://template-design-gamma.vercel.app/',
+            features: ['Member Profiles', 'Collaborative Spaces', 'Team Showcases', 'Community Engagement'],
             rating: 5,
+            category: 'community'
         }
+    
     ];
 
     // Custom development packages
@@ -530,15 +532,15 @@ export default function TemplatesPage() {
 
                                 <motion.div
                                     className={`bg-white/70 backdrop-blur-lg rounded-3xl border-2 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 relative ${pkg.popular
-                                            ? 'border-orange-400 scale-105'
-                                            : 'border-white/40'
+                                        ? 'border-orange-400 scale-105'
+                                        : 'border-white/40'
                                         }`}
                                     whileHover={{ y: -5, scale: pkg.popular ? 1.08 : 1.02 }}
                                 >
                                     {/* Package Header */}
                                     <div className={`p-8 text-center ${pkg.popular
-                                            ? 'bg-gradient-to-r from-orange-500 to-red-500'
-                                            : 'bg-gradient-to-r from-blue-600 to-purple-600'
+                                        ? 'bg-gradient-to-r from-orange-500 to-red-500'
+                                        : 'bg-gradient-to-r from-blue-600 to-purple-600'
                                         }`}>
                                         <motion.div
                                             className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
@@ -578,8 +580,8 @@ export default function TemplatesPage() {
                                                 >
                                                     <motion.div
                                                         className={`w-2 h-2 rounded-full mr-3 ${pkg.popular
-                                                                ? 'bg-gradient-to-r from-orange-500 to-red-500'
-                                                                : 'bg-gradient-to-r from-blue-500 to-purple-500'
+                                                            ? 'bg-gradient-to-r from-orange-500 to-red-500'
+                                                            : 'bg-gradient-to-r from-blue-500 to-purple-500'
                                                             }`}
                                                         animate={{ scale: [1, 1.2, 1] }}
                                                         transition={{ duration: 2, repeat: Infinity, delay: idx * 0.2 }}
@@ -592,8 +594,8 @@ export default function TemplatesPage() {
                                         {/* CTA Button */}
                                         <motion.button
                                             className={`w-full py-4 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn ${pkg.popular
-                                                    ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white'
-                                                    : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                                                ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white'
+                                                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
                                                 }`}
                                             whileHover={{ scale: 1.02 }}
                                             whileTap={{ scale: 0.98 }}
