@@ -21,30 +21,40 @@ import {
   ExternalLink,
   Star,
   Users,
+  ArrowDown,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function HomePage() {
-  const router = useRouter(); // ✅ Move useRouter inside the component function
-  
+  const router = useRouter();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
   const [typingSpeed, setTypingSpeed] = useState(80);
+  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   const { scrollY } = useScroll();
-  const yShift = useTransform(scrollY, [0, 400], [0, 30]);
   const containerRef = useRef(null);
 
-  // Fixed: Move rotatingTexts inside useMemo to prevent dependency changes
+  // Hide scroll indicator when user starts scrolling
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setShowScrollIndicator(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const rotatingTexts = useMemo(() => [
     "Professional Portfolio",
-    "Stunning Website",
+    "Stunning Website", 
     "Creative Showcase",
     "Impressive Profile"
   ], []);
 
-  // Fixed smooth scroll function
   const scrollToSection = useCallback((id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -55,10 +65,9 @@ export default function HomePage() {
     }
   }, []);
 
-  // Throttle mousemove events for better performance
+  // Throttle mousemove events
   useEffect(() => {
     let ticking = false;
-
     const updateMouse = (e) => {
       if (!ticking) {
         requestAnimationFrame(() => {
@@ -68,28 +77,21 @@ export default function HomePage() {
         ticking = true;
       }
     };
-
     window.addEventListener('mousemove', updateMouse, { passive: true });
-
-    return () => {
-      window.removeEventListener('mousemove', updateMouse);
-    };
+    return () => window.removeEventListener('mousemove', updateMouse);
   }, []);
 
-  // Typewriter effect with faster speed
+  // Typewriter effect
   useEffect(() => {
     let timer;
     const handleType = () => {
       const current = currentTextIndex % rotatingTexts.length;
       const fullText = rotatingTexts[current];
-
       setCurrentText(isDeleting
         ? fullText.substring(0, currentText.length - 1)
         : fullText.substring(0, currentText.length + 1)
       );
-
       setTypingSpeed(isDeleting ? 40 : 80);
-
       if (!isDeleting && currentText === fullText) {
         timer = setTimeout(() => setIsDeleting(true), 700);
       } else if (isDeleting && currentText === '') {
@@ -97,12 +99,8 @@ export default function HomePage() {
         setCurrentTextIndex((current + 1) % rotatingTexts.length);
       }
     };
-
     timer = setTimeout(handleType, typingSpeed);
-
-    return () => {
-      clearTimeout(timer);
-    };
+    return () => clearTimeout(timer);
   }, [currentText, isDeleting, currentTextIndex, typingSpeed, rotatingTexts]);
 
   // Animation variants
@@ -143,28 +141,25 @@ export default function HomePage() {
   const services = [
     {
       title: 'Personal Portfolio',
-      description:
-        'Elegant personal portfolio websites designed to showcase your work, skills, and experience in a visually compelling way.',
+      description: 'Elegant personal portfolio websites designed to showcase your work, skills, and experience.',
       icon: Briefcase,
       features: ['Responsive Design', 'Project Gallery', 'About Section', 'Contact Form'],
     },
     {
-      title: 'Community Portfolio',
-      description:
-        'Collaborative platforms for communities, teams, and groups to showcase collective work and achievements together.',
+      title: 'Community Portfolio', 
+      description: 'Collaborative platforms for communities and teams to showcase collective work.',
       icon: Users,
       features: ['Member Profiles', 'Collaborative Spaces', 'Team Showcases', 'Community Engagement'],
     },
     {
       title: 'Developer Portfolio',
-      description:
-        'Clean, technical portfolios for developers to showcase projects, code samples, and technical skills effectively.',
+      description: 'Clean, technical portfolios for developers to showcase projects and technical skills.',
       icon: Code,
       features: ['Code Display', 'Project Showcases', 'Skills Visualization', 'GitHub Integration'],
     },
   ];
 
-  // Tech stack data with correct icons
+  // Tech stack data
   const techStack = [
     {
       name: 'Next.js',
@@ -212,7 +207,7 @@ export default function HomePage() {
 
   // Single client portfolio example
   const clientPortfolio = {
-    name: "Dr.Anup Ingle",
+    name: "Dr. Anup Ingle",
     role: "Assistant Professor At VIT Pune",
     website: "https://www.anupingle.com/",
     image: "https://www.anupingle.com/profile11.png",
@@ -225,85 +220,28 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden" ref={containerRef}>
-      {/* Performance optimized background elements with will-change */}
+      {/* Background elements */}
       <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
         <motion.div
           className="absolute top-24 left-12 w-72 h-72 bg-gradient-to-r from-blue-200/30 to-purple-200/30 rounded-full blur-3xl"
-          style={{
-            x: mousePosition.x * 0.02,
-            y: mousePosition.y * 0.02,
-            willChange: 'transform'
-          }}
+          style={{ x: mousePosition.x * 0.02, y: mousePosition.y * 0.02 }}
           animate={floatingAnimation}
         />
-
         <motion.div
           className="absolute top-1/3 right-16 w-96 h-96 bg-gradient-to-r from-pink-200/20 to-yellow-200/20 rounded-full blur-3xl"
-          style={{
-            x: mousePosition.x * -0.015,
-            y: mousePosition.y * -0.015,
-            willChange: 'transform'
-          }}
+          style={{ x: mousePosition.x * -0.015, y: mousePosition.y * -0.015 }}
           animate={{
             y: [0, -20, 0],
-            transition: {
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }
+            transition: { duration: 6, repeat: Infinity, ease: "easeInOut", delay: 1 }
           }}
         />
-
         <motion.div
           className="absolute bottom-24 left-1/3 w-80 h-80 bg-gradient-to-r from-green-200/25 to-blue-200/25 rounded-3xl blur-3xl"
-          style={{
-            x: mousePosition.x * 0.01,
-            y: mousePosition.y * 0.01,
-            willChange: 'transform'
-          }}
+          style={{ x: mousePosition.x * 0.01, y: mousePosition.y * 0.01 }}
           animate={{
             y: [0, 15, 0],
-            transition: {
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2
-            }
+            transition: { duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }
           }}
-        />
-
-        {/* Floating elements */}
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-6 h-6 bg-blue-400/30 rounded-full"
-          animate={floatingAnimation}
-          style={{ willChange: 'transform' }}
-        />
-        <motion.div
-          className="absolute top-2/3 left-1/5 w-4 h-4 bg-purple-400/30 rounded-full"
-          animate={{
-            y: [0, -10, 0],
-            transition: {
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 0.5
-            }
-          }}
-          style={{ willChange: 'transform' }}
-        />
-        <motion.div
-          className="absolute top-1/3 right-1/4 w-5 h-5 bg-pink-400/30 rounded-full"
-          animate={{
-            y: [0, -12, 0],
-            transition: {
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1.5
-            }
-          }}
-          style={{ willChange: 'transform' }}
         />
       </div>
 
@@ -313,44 +251,39 @@ export default function HomePage() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
-        style={{ willChange: 'transform, opacity' }}
       >
         <div className="max-w-7xl mx-auto flex justify-center items-center">
           <div className="flex items-center space-x-12">
             <motion.button
-              onClick={() => scrollToSection('work')}
+              onClick={() => scrollToSection('templates')}
               className="text-slate-700 hover:text-blue-600 transition-colors duration-300 relative group"
               whileHover={{ y: -2 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
               Templates
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
             </motion.button>
             <motion.button
-              onClick={() => scrollToSection('about')}
+              onClick={() => scrollToSection('tech')} 
               className="text-slate-700 hover:text-purple-600 transition-colors duration-300 relative group"
               whileHover={{ y: -2 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              Features
+              Tech Stack
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-purple-600 transition-all duration-300 group-hover:w-full"></span>
             </motion.button>
-
             <motion.button
-              onClick={() => scrollToSection('contact')}
+              onClick={() => scrollToSection('example')}
               className="text-slate-700 hover:text-pink-600 transition-colors duration-300 relative group"
               whileHover={{ y: -2 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-              Contact
+              Examples
               <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-pink-600 transition-all duration-300 group-hover:w-full"></span>
             </motion.button>
           </div>
         </div>
       </motion.nav>
 
-      {/* Hero Section */}
-      <motion.header className="relative z-10 max-w-4xl mx-auto px-6 pt-12 pb-12 text-center" variants={containerVariants} initial="hidden" animate="visible">
+      {/* Hero Section - ONLY EXPLORE CTA */}
+      <motion.header className="relative z-10 max-w-4xl mx-auto px-6 pt-12 pb-20 text-center" variants={containerVariants} initial="hidden" animate="visible">
         <motion.div variants={itemVariants} className="space-y-6">
           <motion.h1 className="text-4xl sm:text-5xl lg:text-7xl font-bold text-slate-900 leading-tight">
             <motion.span
@@ -358,18 +291,14 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="block"
-              style={{ willChange: 'transform, opacity' }}
             >
               Stand Out With A{' '}
             </motion.span>
-
-            {/* Fixed Typewriter Section */}
             <motion.div
               className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent inline-block min-h-[60px] sm:min-h-[80px] lg:min-h-[96px] overflow-visible"
               initial={{ backgroundPosition: '200% 0' }}
               animate={{ backgroundPosition: '0% 0' }}
               transition={{ duration: 1.8, ease: "easeInOut" }}
-              style={{ willChange: 'background-position' }}
             >
               <span className="block h-full flex items-center justify-center">
                 {currentText}
@@ -389,66 +318,77 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.45, ease: [0.25, 0.46, 0.45, 0.94] }}
-            style={{ willChange: 'transform, opacity' }}
           >
             Get noticed with a stunning portfolio that showcases your best work. Our templates are designed to impress clients and employers while highlighting your unique talents and personality.
           </motion.p>
 
+          {/* SINGLE CTA - EXPLORE PORTFOLIOS */}
           <motion.div
-            className="flex flex-col sm:flex-row gap-4 justify-center mt-2 px-4"
+            className="flex justify-center mt-2 px-4"
             variants={itemVariants}
           >
             <motion.button
-              className="group inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+              className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
               whileHover={{ scale: 1.05, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => scrollToSection('work')}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              onClick={() => scrollToSection('templates')}
             >
               <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-              <Palette className="w-4 h-4 sm:w-5 sm:h-5 mr-2 relative z-10" />
-              <span className="relative z-10 text-sm sm:text-base">Create Your Portfolio</span>
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 relative z-10" />
-            </motion.button>
-
-            <motion.button
-              className="group inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-white/80 backdrop-blur-sm text-slate-700 font-semibold rounded-2xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => router.push('/templates')}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-              <Code className="w-4 h-4 sm:w-5 sm:h-5 mr-2 relative z-10" />
-              <span className="relative z-10 text-sm sm:text-base">View All Templates</span>
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 relative z-10" />
+              <Palette className="w-5 h-5 mr-3 relative z-10" />
+              <span className="relative z-10 text-lg">Explore Portfolio Templates</span>
+              <ArrowDown className="w-5 h-5 ml-2 group-hover:translate-y-1 transition-transform duration-300 relative z-10" />
             </motion.button>
           </motion.div>
         </motion.div>
+
+        {/* Scroll Indicator */}
+        <AnimatePresence>
+          {showScrollIndicator && (
+            <motion.div
+              className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.5 }}
+            >
+              <motion.div
+                className="flex flex-col items-center text-slate-500 cursor-pointer"
+                onClick={() => scrollToSection('templates')}
+                whileHover={{ y: 5 }}
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                <span className="text-sm mb-2">Explore Templates</span>
+                <ArrowDown className="w-5 h-5" />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.header>
 
-      {/* Services / Cards Section */}
-      <main id="work" className="relative z-10 max-w-7xl mx-auto px-6 pb-12" style={{ paddingBottom: 48 }}>
+      {/* Portfolio Template Gallery Section - FIRST SECTION */}
+      <section id="templates" className="relative z-10 max-w-7xl mx-auto px-6 pb-20">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-120px' }}>
-          <motion.div variants={itemVariants} className="text-center mb-12">
+          <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
               Portfolio <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Template Gallery</span>
             </h2>
-            <p className="text-xl text-slate-700 max-w-2xl mx-auto">Choose from our professionally designed templates to create a portfolio that truly represents you and your work.</p>
+            <p className="text-xl text-slate-700 max-w-2xl mx-auto">
+              Choose from our professionally designed templates to create a portfolio that truly represents you and your work.
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
             {services.map((service, idx) => (
               <motion.article
                 key={idx}
                 className="group p-8 bg-white/60 backdrop-blur-sm rounded-3xl border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 relative overflow-hidden"
                 variants={itemVariants}
-                whileHover={{ scale: 1.02, y: -8, boxShadow: '0 25px 50px rgba(0,0,0,0.12)' }}
+                whileHover={{ scale: 1.02, y: -8 }}
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.2, type: "spring", stiffness: 100, damping: 15 }}
+                transition={{ delay: idx * 0.2 }}
                 viewport={{ once: true, margin: '-50px' }}
-                style={{ willChange: 'transform, opacity' }}
               >
                 <div className="absolute -top-4 -right-4 w-24 h-24 bg-blue-500/10 rounded-full blur-xl"></div>
 
@@ -456,7 +396,6 @@ export default function HomePage() {
                   className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
-                  style={{ willChange: 'transform' }}
                 >
                   <service.icon className="w-8 h-8 text-white" />
                 </motion.div>
@@ -470,29 +409,24 @@ export default function HomePage() {
                       key={i}
                       className="flex items-center text-sm text-slate-700"
                       whileHover={{ x: 5 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 10 }}
-                      style={{ willChange: 'transform' }}
                     >
                       <motion.div
                         className="w-2 h-2 bg-blue-500 rounded-full mr-3"
                         animate={{ scale: [1, 1.5, 1] }}
                         transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
-                        style={{ willChange: 'transform' }}
                       />
                       {f}
                     </motion.div>
                   ))}
                 </div>
-
-               
               </motion.article>
             ))}
           </div>
         </motion.div>
-      </main>
+      </section>
 
       {/* Features Section */}
-      <section id="about" className="relative z-10 max-w-7xl mx-auto px-6 py-16">
+      <section id="features" className="relative z-10 max-w-7xl mx-auto px-6 py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-120px' }}>
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
@@ -514,9 +448,8 @@ export default function HomePage() {
                 whileHover={{ y: -5 }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1, type: "spring", stiffness: 100, damping: 12 }}
+                transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true, margin: '-50px' }}
-                style={{ willChange: 'transform, opacity' }}
               >
                 <div className="absolute -bottom-4 -right-4 w-20 h-20 bg-blue-500/10 rounded-full blur-xl"></div>
 
@@ -524,7 +457,6 @@ export default function HomePage() {
                   className={`w-12 h-12 ${feature.color === 'blue' ? 'bg-blue-100' : feature.color === 'purple' ? 'bg-purple-100' : 'bg-pink-100'} rounded-xl flex items-center justify-center mb-4`}
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.5 }}
-                  style={{ willChange: 'transform' }}
                 >
                   <feature.icon className={`w-6 h-6 ${feature.color === 'blue' ? 'text-blue-600' : feature.color === 'purple' ? 'text-purple-600' : 'text-pink-600'}`} />
                 </motion.div>
@@ -537,12 +469,12 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* Tech Stack Section */}
+      {/* Tech Stack Section - SECOND SECTION */}
       <section id="tech" className="relative z-10 max-w-7xl mx-auto px-6 py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-120px' }}>
           <motion.div variants={itemVariants} className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-              Built With <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">Modern Tech</span>
+              Built With <span className="bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">Modern Tech Stack</span>
             </h2>
             <p className="text-xl text-slate-700 max-w-2xl mx-auto">
               Our templates leverage the latest technologies to ensure performance, scalability, and an amazing user experience.
@@ -558,9 +490,8 @@ export default function HomePage() {
                 whileHover={{ y: -5, scale: 1.02 }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.1, type: "spring", stiffness: 100, damping: 12 }}
+                transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true, margin: '-50px' }}
-                style={{ willChange: 'transform, opacity' }}
               >
                 <div className="absolute -top-4 -right-4 w-20 h-20 bg-green-500/10 rounded-full blur-xl"></div>
 
@@ -568,7 +499,6 @@ export default function HomePage() {
                   className={`w-14 h-14 ${tech.bgColor} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                   whileHover={{ rotate: [0, -10, 10, 0] }}
                   transition={{ duration: 0.5 }}
-                  style={{ willChange: 'transform' }}
                 >
                   <tech.icon className={`w-7 h-7 ${tech.color}`} />
                 </motion.div>
@@ -582,73 +512,26 @@ export default function HomePage() {
                   whileInView={{ width: '100%' }}
                   transition={{ delay: idx * 0.1 + 0.3, duration: 0.8 }}
                   viewport={{ once: true }}
-                  style={{ willChange: 'width' }}
                 />
               </motion.div>
             ))}
           </div>
-
-          {/* Tech Highlights */}
-          <motion.div
-            className="mt-16 p-8 bg-gradient-to-r from-green-50 to-blue-50 rounded-3xl border border-green-100/50 shadow-lg"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            viewport={{ once: true, margin: '-50px' }}
-            style={{ willChange: 'transform, opacity' }}
-          >
-            <div className="text-center max-w-3xl mx-auto">
-              <motion.h3
-                className="text-2xl lg:text-3xl font-bold text-slate-900 mb-4"
-                animate={{ scale: [1, 1.02, 1] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                style={{ willChange: 'transform' }}
-              >
-                Why This Tech Stack?
-              </motion.h3>
-              <p className="text-lg text-slate-700 mb-6 leading-relaxed">
-                We use Next.js for optimal performance and SEO, React for component-based architecture,
-                TypeScript for type safety, Framer Motion for buttery-smooth animations, and Tailwind CSS
-                for rapid, consistent styling. This combination ensures your portfolio is fast, maintainable, and beautiful.
-              </p>
-              <motion.div
-                className="flex flex-wrap justify-center gap-4"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.5, staggerChildren: 0.1 }}
-                viewport={{ once: true }}
-                style={{ willChange: 'opacity' }}
-              >
-                {['⚡ Blazing Fast', '🎨 Beautiful Animations', '📱 Fully Responsive', '🔍 SEO Optimized', '🛠 Easy to Maintain'].map((item, i) => (
-                  <motion.span
-                    key={i}
-                    className="px-4 py-2 bg-white/80 backdrop-blur-sm text-slate-700 rounded-full text-sm font-medium shadow-sm"
-                    whileHover={{ scale: 1.05, y: -2 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    style={{ willChange: 'transform' }}
-                  >
-                    {item}
-                  </motion.span>
-                ))}
-              </motion.div>
-            </div>
-          </motion.div>
         </motion.div>
       </section>
 
-      {/* Single Client Portfolio Example Section */}
+      {/* Real Example Section - THIRD SECTION */}
       <section id="example" className="relative z-10 max-w-4xl mx-auto px-6 py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-120px' }}>
           <motion.div variants={itemVariants} className="text-center mb-12">
             <h2 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-4">
-              See Our <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Work Example</span>
+              See Our <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Work In Action</span>
             </h2>
             <p className="text-xl text-slate-700 max-w-2xl mx-auto">
               Check out this stunning portfolio we created for a professional developer.
             </p>
           </motion.div>
 
-          {/* Single Client Card - Centered */}
+          {/* Single Client Card */}
           <div className="flex justify-center">
             <motion.div
               className="group cursor-pointer max-w-sm w-full"
@@ -660,18 +543,15 @@ export default function HomePage() {
               transition={{ type: "spring", stiffness: 100, damping: 12 }}
               viewport={{ once: true, margin: '-50px' }}
               onClick={handleClientClick}
-              style={{ willChange: 'transform, opacity' }}
             >
               <div className="relative bg-white/60 backdrop-blur-sm rounded-3xl border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 p-8 text-center overflow-hidden">
-                {/* Background glow */}
                 <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/10 rounded-full blur-xl"></div>
 
-                {/* Client Avatar Circle with Image */}
+                {/* Client Avatar */}
                 <motion.div
                   className="relative mx-auto mb-6 w-32 h-32 rounded-full bg-gradient-to-br from-orange-400 to-red-500 p-2 shadow-lg group-hover:shadow-xl transition-all duration-300"
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
-                  style={{ willChange: 'transform' }}
                 >
                   <div className="w-full h-full rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center overflow-hidden">
                     <img
@@ -679,35 +559,26 @@ export default function HomePage() {
                       alt={clientPortfolio.name}
                       className="w-full h-full rounded-full object-cover"
                       onError={(e) => {
-                        // Fallback to initials if image fails to load
                         e.target.style.display = 'none';
                         e.target.nextSibling.style.display = 'flex';
                       }}
                     />
-                    {/* Fallback initials - hidden by default, shown if image fails */}
-                    <div
-                      className="w-full h-full rounded-full bg-gradient-to-br from-orange-100 to-red-100 hidden items-center justify-center text-orange-600 font-bold text-2xl"
-                    >
+                    <div className="w-full h-full rounded-full bg-gradient-to-br from-orange-100 to-red-100 hidden items-center justify-center text-orange-600 font-bold text-2xl">
                       AI
                     </div>
                   </div>
 
-                  {/* External link indicator */}
                   <motion.div
                     className="absolute -top-2 -right-2 w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg"
                     whileHover={{ scale: 1.2 }}
-                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    style={{ willChange: 'transform' }}
                   >
                     <ExternalLink className="w-4 h-4 text-white" />
                   </motion.div>
                 </motion.div>
 
-                {/* Client Info */}
                 <h3 className="text-2xl font-bold text-slate-900 mb-2">{clientPortfolio.name}</h3>
                 <p className="text-orange-600 font-medium text-lg mb-4">{clientPortfolio.role}</p>
 
-                {/* Rating */}
                 <div className="flex justify-center items-center mb-6">
                   {[...Array(5)].map((_, i) => (
                     <Star
@@ -720,101 +591,33 @@ export default function HomePage() {
                   ))}
                 </div>
 
-                {/* Click instruction */}
                 <motion.p
                   className="text-slate-600 text-sm flex items-center justify-center gap-2"
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
-                  style={{ willChange: 'opacity' }}
                 >
                   <ExternalLink className="w-4 h-4" />
                   Click to visit portfolio website
                 </motion.p>
-
-                {/* Hover overlay */}
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <motion.div
-                    initial={{ scale: 0, opacity: 0 }}
-                    whileHover={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                    className="bg-white/90 backdrop-blur-sm rounded-xl p-4 shadow-lg"
-                    style={{ willChange: 'transform, opacity' }}
-                  >
-                    <p className="text-slate-800 text-base font-semibold flex items-center">
-                      <ExternalLink className="w-4 h-4 mr-2" />
-                      Visit {clientPortfolio.name}&apos;s Portfolio
-                    </p>
-                  </motion.div>
-                </div>
               </div>
             </motion.div>
           </div>
-
-          {/* Call to action */}
-          <motion.div
-            className="text-center mt-12"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            viewport={{ once: true }}
-            style={{ willChange: 'transform, opacity' }}
-          >
-            <p className="text-lg text-slate-700 mb-6">
-              Ready to have a portfolio like this?
-            </p>
-            <motion.button
-              className="group inline-flex items-center px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => scrollToSection('contact')}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              style={{ willChange: 'transform' }}
-            >
-              <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-              <span className="relative z-10">Get Your Portfolio Now</span>
-              <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 relative z-10" />
-            </motion.button>
-          </motion.div>
         </motion.div>
       </section>
 
-      {/* CTA Section */}
-      <section id="contact" className="relative z-10 max-w-4xl mx-auto px-6 py-16 text-center">
+      {/* FINAL CTA Section - View Templates */}
+      <section id="view-templates" className="relative z-10 max-w-4xl mx-auto px-6 py-16 text-center">
         <motion.div
           className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white shadow-xl relative overflow-hidden"
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
           viewport={{ once: true, margin: '-50px' }}
-          style={{ willChange: 'transform, opacity' }}
         >
-          {/* Animated sparkles */}
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-2 h-2 bg-yellow-300 rounded-full"
-              style={{
-                top: `${20 + i * 15}%`,
-                left: `${10 + i * 20}%`,
-                willChange: 'transform, opacity'
-              }}
-              animate={{
-                scale: [0, 1, 0],
-                opacity: [0, 1, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                delay: i * 0.5,
-              }}
-            />
-          ))}
-
           <motion.h2
             className="text-3xl lg:text-4xl font-bold mb-4"
             animate={{ scale: [1, 1.02, 1] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-            style={{ willChange: 'transform' }}
           >
             Ready to Create Your Portfolio?
           </motion.h2>
@@ -823,20 +626,19 @@ export default function HomePage() {
             className="text-blue-100 text-xl mb-8"
             animate={{ opacity: [0.8, 1, 0.8] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            style={{ willChange: 'opacity' }}
           >
-            Get started today and showcase your work with a professional portfolio.
+            Explore all our templates and choose the perfect one for your needs.
           </motion.p>
 
           <motion.button
             className="group inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
             whileHover={{ scale: 1.05, y: -2 }}
             whileTap={{ scale: 0.98 }}
-            transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            style={{ willChange: 'transform' }}
+            onClick={() => router.push('/templates')}
           >
             <span className="absolute inset-0 bg-blue-600/10 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></span>
-            <span className="relative z-10">Get Started Now</span>
+            <Code className="w-5 h-5 mr-3 relative z-10" />
+            <span className="relative z-10 text-lg">View All Templates</span>
             <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-300 relative z-10" />
           </motion.button>
         </motion.div>
@@ -848,9 +650,8 @@ export default function HomePage() {
           className="text-slate-700"
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          style={{ willChange: 'opacity' }}
         >
-          © {new Date().getFullYear()}. Creater Reasearch All rights reserved.
+          © {new Date().getFullYear()}. Creater Research. All rights reserved.
         </motion.p>
       </footer>
     </div>
