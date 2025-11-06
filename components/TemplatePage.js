@@ -5,14 +5,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import ContactForm from '@/components/ContactForm';
 
 export default function TemplatesPage() {
     const router = useRouter();
     const [hoveredCard, setHoveredCard] = useState(null);
 
+    const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+    const [selectedTemplate, setSelectedTemplate] = useState(null);
+    const [selectedPackage, setSelectedPackage] = useState(null);
+
     // Template data with actual image paths
     const templates = [
-       
         {
             id: 1,
             title: 'Developer Portfolio Pro',
@@ -46,7 +50,6 @@ export default function TemplatesPage() {
             rating: 5,
             category: 'community'
         }
-    
     ];
 
     // Custom development packages
@@ -111,22 +114,26 @@ export default function TemplatesPage() {
         window.open(url, '_blank', 'noopener,noreferrer');
     };
 
-    const handleBackClick = () => {
-        router.back();
-    };
-
     const handleHomeClick = () => {
         router.push('/');
     };
 
-    const handleContactClick = (packageType = 'general') => {
-        // You can modify this to pass the package type to your contact form
-        router.push('/#contact');
+    const handleContactClick = (template = null) => {
+        setSelectedTemplate(template);
+        setSelectedPackage(null);
+        setIsContactFormOpen(true);
     };
 
     const handleCustomContact = (pkg) => {
-        // This could open a modal or redirect with package details
-        router.push('/#contact');
+        setSelectedPackage(pkg);
+        setSelectedTemplate(null);
+        setIsContactFormOpen(true);
+    };
+
+    const handleCloseContactForm = () => {
+        setIsContactFormOpen(false);
+        setSelectedTemplate(null);
+        setSelectedPackage(null);
     };
 
     // Animation variants
@@ -414,20 +421,37 @@ export default function TemplatesPage() {
                                             ))}
                                         </div>
 
-                                        {/* CTA Button */}
-                                        <motion.button
-                                            className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn"
-                                            whileHover="hover"
-                                            whileTap="tap"
-                                            variants={buttonHoverVariants}
-                                            onClick={() => handleTemplateClick(template.liveUrl)}
-                                        >
-                                            <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-                                            <span className="relative z-10 flex items-center justify-center">
-                                                <ExternalLink className="w-4 h-4 mr-2" />
-                                                View Live Demo
-                                            </span>
-                                        </motion.button>
+                                        {/* CTA Buttons */}
+                                        <div className="space-y-3">
+                                            <motion.button
+                                                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn"
+                                                whileHover="hover"
+                                                whileTap="tap"
+                                                variants={buttonHoverVariants}
+                                                onClick={() => handleTemplateClick(template.liveUrl)}
+                                            >
+                                                <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                                                <span className="relative z-10 flex items-center justify-center">
+                                                    <ExternalLink className="w-4 h-4 mr-2" />
+                                                    View Live Demo
+                                                </span>
+                                            </motion.button>
+                                            
+                                            {/* INDIVIDUAL TEMPLATE CONTACT BUTTON */}
+                                            <motion.button
+                                                className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/contact"
+                                                whileHover="hover"
+                                                whileTap="tap"
+                                                variants={buttonHoverVariants}
+                                                onClick={() => handleContactClick(template)}
+                                            >
+                                                <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/contact:translate-x-full transition-transform duration-700" />
+                                                <span className="relative z-10 flex items-center justify-center">
+                                                    <MessageCircle className="w-4 h-4 mr-2" />
+                                                    Contact About This Template
+                                                </span>
+                                            </motion.button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             </motion.div>
@@ -435,46 +459,9 @@ export default function TemplatesPage() {
                     </AnimatePresence>
                 </motion.div>
 
-                {/* Standard Contact Button Section - MOVED ABOVE CUSTOM SECTION */}
-                <motion.div
-                    className="text-center mt-20 mb-24"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
-                >
-                    <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 border border-white/40 shadow-xl relative overflow-hidden">
-                        {/* Background glow */}
-                        <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
-                        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl" />
+        
 
-                        <motion.h3
-                            className="text-3xl font-bold text-slate-900 mb-4"
-                            animate={{ scale: [1, 1.02, 1] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            Ready to Get Started?
-                        </motion.h3>
-                        <motion.p
-                            className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto leading-relaxed"
-                            animate={{ opacity: [0.8, 1, 0.8] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                        >
-                            Found a template you like? Contact us to get your portfolio set up and customized to your needs.
-                        </motion.p>
-                        <motion.button
-                            className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
-                            whileHover={{ scale: 1.05, y: -3 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleContactClick()}
-                        >
-                            <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                            <MessageCircle className="w-5 h-5 mr-3 relative z-10" />
-                            <span className="relative z-10 text-lg">Contact Us to Get Started</span>
-                        </motion.button>
-                    </div>
-                </motion.div>
-
-                {/* Custom Development Section - NOW BELOW THE READY SECTION */}
+                {/* Custom Development Section */}
                 <motion.section
                     className="mt-16"
                     initial={{ opacity: 0, y: 50 }}
@@ -613,35 +600,53 @@ export default function TemplatesPage() {
                         ))}
                     </motion.div>
 
-                    {/* Custom Quote CTA */}
-                    <motion.div
-                        className="text-center mt-12"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6, duration: 0.6 }}
-                        viewport={{ once: true }}
-                    >
-                        <div className="bg-gradient-to-r from-slate-900 to-slate-700 rounded-3xl p-8 text-white shadow-xl">
-                            <h3 className="text-2xl font-bold mb-4">
-                                Have Specific Requirements?
-                            </h3>
-                            <p className="text-slate-300 mb-6 max-w-2xl mx-auto">
-                                Need something beyond our standard packages? Contact us for a personalized quote tailored to your exact needs.
-                            </p>
-                            <motion.button
-                                className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group"
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.98 }}
-                                onClick={() => handleContactClick('custom-quote')}
-                            >
-                                <span className="absolute inset-0 bg-slate-900/10 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                                <Settings className="w-5 h-5 mr-3 relative z-10" />
-                                <span className="relative z-10">Get Custom Quote</span>
-                            </motion.button>
-                        </div>
-                    </motion.div>
+                            {/* Standard Contact Button Section */}
+                <motion.div
+                    className="text-center mt-20 mb-24"
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
+                >
+                    <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 border border-white/40 shadow-xl relative overflow-hidden">
+                        {/* Background glow */}
+                        <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
+                        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl" />
+
+                        <motion.h3
+                            className="text-3xl font-bold text-slate-900 mb-4"
+                            animate={{ scale: [1, 1.02, 1] }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                        >
+                            Ready to Get Started?
+                        </motion.h3>
+                        <motion.p
+                            className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto leading-relaxed"
+                            animate={{ opacity: [0.8, 1, 0.8] }}
+                            transition={{ duration: 3, repeat: Infinity }}
+                        >
+                            Found a template you like? Contact us to get your portfolio set up and customized to your needs.
+                        </motion.p>
+                        <motion.button
+                            className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
+                            whileHover={{ scale: 1.05, y: -3 }}
+                            whileTap={{ scale: 0.98 }}
+                            onClick={() => handleContactClick()} // General inquiry
+                        >
+                            <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                            <MessageCircle className="w-5 h-5 mr-3 relative z-10" />
+                            <span className="relative z-10 text-lg">Contact Us to Get Started</span>
+                        </motion.button>
+                    </div>
+                </motion.div>
                 </motion.section>
             </main>
+
+            <ContactForm
+                isOpen={isContactFormOpen}
+                onClose={handleCloseContactForm}
+                selectedTemplate={selectedTemplate}
+                selectedPackage={selectedPackage}
+            />
         </div>
     );
 }
