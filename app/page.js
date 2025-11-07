@@ -422,6 +422,18 @@ export default function HomePage() {
               </motion.article>
             ))}
           </div>
+          <motion.div 
+            className="text-center mt-12 p-6 bg-white/40 backdrop-blur-sm rounded-2xl border border-white/20 max-w-2xl mx-auto"
+            variants={itemVariants}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-lg text-slate-700 italic">
+              "These are just a few examples of what we can do. Our designs are custom-tailored to your unique story and goals."
+            </p>
+          </motion.div>
         </motion.div>
       </section>
 
