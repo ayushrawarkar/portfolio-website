@@ -651,7 +651,7 @@ export default function HomePage() {
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          © {new Date().getFullYear()}. Creater Research. All rights reserved.
+          © {new Date().getFullYear()}. Creator Research Pvt.Ltd. All Rights Reserved.
         </motion.p>
       </footer>
     </div>

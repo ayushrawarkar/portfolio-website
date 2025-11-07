@@ -1,9 +1,9 @@
 // components/ContactForm.jsx
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { X, Send, User, Mail, MessageSquare, Briefcase, CheckCircle, FileText, Calendar, DollarSign, Image, Link, BookOpen, Users, Code, Palette } from 'lucide-react';
+import { X, Send, User, Mail, MessageSquare, Briefcase, CheckCircle, FileText, Calendar, DollarSign, Image, Link, BookOpen, Users, Code, Palette, Globe, Building, Target } from 'lucide-react';
 
 export default function ContactForm({ isOpen, onClose, selectedTemplate, selectedPackage }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -26,10 +26,32 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
     skills: '',
     projects: '',
     teamSize: '',
-    memberProfiles: ''
+    memberProfiles: '',
+    communityType: '',
+    organizationSize: '',
+    collaborationTools: '',
+    targetAudience: ''
   });
 
-  const FORM_SUBMIT_EMAIL = 'ayushrawarkar2004@gmail.com'; // Replace with your email
+  // Timeline to budget mapping
+  const timelineBudgetMap = {
+    '1-2 weeks': '$5,000 - $10,000',
+    '2-4 weeks': '$3,000 - $7,000', 
+    '1-2 months': '$1,000 - $3,000',
+    'ASAP': 'Custom Quote (Express Delivery)'
+  };
+
+  const FORM_SUBMIT_EMAIL = 'ayushrawarkar2004@gmail.com';
+
+  // Auto-update budget when timeline changes
+  useEffect(() => {
+    if (formData.timeline && timelineBudgetMap[formData.timeline]) {
+      setFormData(prev => ({
+        ...prev,
+        budget: timelineBudgetMap[formData.timeline]
+      }));
+    }
+  }, [formData.timeline]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +73,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
         formDataToSend.append('template_category', selectedTemplate.category);
         
         // Template-specific information
-        formDataToSend.append('project_count', formData.projectCount);
         formDataToSend.append('has_content', formData.hasContent);
         formDataToSend.append('color_preference', formData.colorPreference);
         formDataToSend.append('has_logo', formData.logo);
@@ -62,12 +83,22 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
           formDataToSend.append('github_username', formData.githubUsername);
           formDataToSend.append('skills_list', formData.skills);
           formDataToSend.append('projects_description', formData.projects);
+          formDataToSend.append('project_count', formData.projectCount);
+        }
+        
+        // Personal template specific
+        if (selectedTemplate.category === 'personal') {
+          formDataToSend.append('project_count', formData.projectCount);
         }
         
         // Community template specific
         if (selectedTemplate.category === 'community') {
           formDataToSend.append('team_size', formData.teamSize);
           formDataToSend.append('member_profiles', formData.memberProfiles);
+          formDataToSend.append('community_type', formData.communityType);
+          formDataToSend.append('organization_size', formData.organizationSize);
+          formDataToSend.append('collaboration_tools', formData.collaborationTools);
+          formDataToSend.append('target_audience', formData.targetAudience);
         }
       }
       
@@ -102,7 +133,8 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
         setFormData({ 
           name: '', email: '', message: '', budget: '', timeline: '', projectType: '',
           projectCount: '', hasContent: '', colorPreference: '', logo: '', socialLinks: '',
-          githubUsername: '', skills: '', projects: '', teamSize: '', memberProfiles: ''
+          githubUsername: '', skills: '', projects: '', teamSize: '', memberProfiles: '',
+          communityType: '', organizationSize: '', collaborationTools: '', targetAudience: ''
         });
         setTimeout(() => {
           onClose();
@@ -136,30 +168,9 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
   const getTemplateQuestions = () => {
     if (!selectedTemplate) return null;
 
-    const baseQuestions = (
+    // Common questions for all templates
+    const commonQuestions = (
       <>
-        {/* Project Count */}
-        <div>
-          <label htmlFor="projectCount" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <FileText className="w-4 h-4 mr-2" />
-            How many projects do you want to showcase? *
-          </label>
-          <select
-            id="projectCount"
-            name="projectCount"
-            required
-            value={formData.projectCount}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          >
-            <option value="">Select number of projects</option>
-            <option value="1-3">1-3 projects</option>
-            <option value="4-6">4-6 projects</option>
-            <option value="7-10">7-10 projects</option>
-            <option value="10+">More than 10 projects</option>
-          </select>
-        </div>
-
         {/* Content Ready */}
         <div>
           <label htmlFor="hasContent" className="flex items-center text-sm font-medium text-gray-700 mb-2">
@@ -240,9 +251,30 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
       </>
     );
 
-    // Developer-specific questions
+    // Developer Portfolio Pro specific questions
     const developerQuestions = selectedTemplate.category === 'developer' && (
       <>
+        <div>
+          <label htmlFor="projectCount" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <Code className="w-4 h-4 mr-2" />
+            How many coding projects to showcase? *
+          </label>
+          <select
+            id="projectCount"
+            name="projectCount"
+            required
+            value={formData.projectCount}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <option value="">Select number of projects</option>
+            <option value="1-3">1-3 projects</option>
+            <option value="4-6">4-6 projects</option>
+            <option value="7-10">7-10 projects</option>
+            <option value="10+">More than 10 projects</option>
+          </select>
+        </div>
+
         <div>
           <label htmlFor="githubUsername" className="flex items-center text-sm font-medium text-gray-700 mb-2">
             <Code className="w-4 h-4 mr-2" />
@@ -294,34 +326,145 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
       </>
     );
 
-    // Community-specific questions
-    const communityQuestions = selectedTemplate.category === 'community' && (
+    // Personal Portfolio Elegance specific questions
+    const personalQuestions = selectedTemplate.category === 'personal' && (
       <>
         <div>
-          <label htmlFor="teamSize" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <Users className="w-4 h-4 mr-2" />
-            Team/Community Size *
+          <label htmlFor="projectCount" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <FileText className="w-4 h-4 mr-2" />
+            How many creative projects to showcase? *
           </label>
           <select
-            id="teamSize"
-            name="teamSize"
+            id="projectCount"
+            name="projectCount"
             required
-            value={formData.teamSize}
+            value={formData.projectCount}
             onChange={handleChange}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           >
-            <option value="">Select team size</option>
-            <option value="1-5">1-5 members</option>
-            <option value="6-15">6-15 members</option>
-            <option value="16-30">16-30 members</option>
-            <option value="30+">30+ members</option>
+            <option value="">Select number of projects</option>
+            <option value="1-3">1-3 projects</option>
+            <option value="4-6">4-6 projects</option>
+            <option value="7-10">7-10 projects</option>
+            <option value="10+">More than 10 projects</option>
           </select>
+        </div>
+
+        <div>
+          <label htmlFor="projectType" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <Briefcase className="w-4 h-4 mr-2" />
+            What type of creative work do you do? *
+          </label>
+          <select
+            id="projectType"
+            name="projectType"
+            required
+            value={formData.projectType}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <option value="">Select your field</option>
+            <option value="graphic-design">Graphic Design</option>
+            <option value="ui-ux-design">UI/UX Design</option>
+            <option value="photography">Photography</option>
+            <option value="illustration">Illustration</option>
+            <option value="writing">Writing/Content Creation</option>
+            <option value="other-creative">Other Creative Field</option>
+          </select>
+        </div>
+      </>
+    );
+
+    // Community Portfolio Hub specific questions
+    const communityQuestions = selectedTemplate.category === 'community' && (
+      <>
+        <div>
+          <label htmlFor="communityType" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <Users className="w-4 h-4 mr-2" />
+            What type of community/organization? *
+          </label>
+          <select
+            id="communityType"
+            name="communityType"
+            required
+            value={formData.communityType}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <option value="">Select community type</option>
+            <option value="business-team">Business Team</option>
+            <option value="non-profit">Non-Profit Organization</option>
+            <option value="creative-collective">Creative Collective</option>
+            <option value="professional-network">Professional Network</option>
+            <option value="educational-institution">Educational Institution</option>
+            <option value="other-community">Other</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="organizationSize" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <Building className="w-4 h-4 mr-2" />
+            Organization/Community Size *
+          </label>
+          <select
+            id="organizationSize"
+            name="organizationSize"
+            required
+            value={formData.organizationSize}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <option value="">Select size</option>
+            <option value="1-10">1-10 members</option>
+            <option value="11-25">11-25 members</option>
+            <option value="26-50">26-50 members</option>
+            <option value="51-100">51-100 members</option>
+            <option value="100+">100+ members</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="targetAudience" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <Target className="w-4 h-4 mr-2" />
+            Who is your target audience? *
+          </label>
+          <select
+            id="targetAudience"
+            name="targetAudience"
+            required
+            value={formData.targetAudience}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          >
+            <option value="">Select target audience</option>
+            <option value="general-public">General Public</option>
+            <option value="clients-customers">Clients/Customers</option>
+            <option value="members-only">Members Only</option>
+            <option value="investors-partners">Investors/Partners</option>
+            <option value="students-learners">Students/Learners</option>
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="collaborationTools" className="flex items-center text-sm font-medium text-gray-700 mb-2">
+            <Globe className="w-4 h-4 mr-2" />
+            What collaboration features are needed?
+          </label>
+          <textarea
+            id="collaborationTools"
+            name="collaborationTools"
+            rows={3}
+            value={formData.collaborationTools}
+            onChange={handleChange}
+            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+            placeholder="e.g., Member directories, project galleries, event calendars, discussion forums, contact forms..."
+          />
         </div>
 
         <div>
           <label htmlFor="memberProfiles" className="flex items-center text-sm font-medium text-gray-700 mb-2">
             <Users className="w-4 h-4 mr-2" />
-            Member Profile Information
+            Member Profile Information Needed
           </label>
           <textarea
             id="memberProfiles"
@@ -330,7 +473,7 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
             value={formData.memberProfiles}
             onChange={handleChange}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="What information should we include for each member? (e.g., role, bio, skills, contact info)"
+            placeholder="What information should we include for each member? (e.g., role, bio, skills, contact info, social links)"
           />
         </div>
       </>
@@ -338,8 +481,9 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
 
     return (
       <>
-        {baseQuestions}
+        {commonQuestions}
         {developerQuestions}
+        {personalQuestions}
         {communityQuestions}
       </>
     );
@@ -440,33 +584,31 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
             {/* Template-Specific Questions */}
             {isTemplateInquiry && getTemplateQuestions()}
 
-            {/* Budget & Timeline */}
-            <div className="grid grid-cols-2 gap-4">
+            {/* Timeline & Budget - Side by Side */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Budget - Left Side */}
               <div>
                 <label htmlFor="budget" className="flex items-center text-sm font-medium text-gray-700 mb-2">
                   <DollarSign className="w-4 h-4 mr-2" />
-                  Budget *
+                  Estimated Budget *
                 </label>
-                <select
+                <input
+                  type="text"
                   id="budget"
                   name="budget"
                   required
+                  readOnly
                   value={formData.budget}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                >
-                  <option value="">Select budget</option>
-                  <option value="$500 - $1,000">$500 - $1,000</option>
-                  <option value="$1,000 - $2,500">$1,000 - $2,500</option>
-                  <option value="$2,500 - $5,000">$2,500 - $5,000</option>
-                  <option value="$5,000+">$5,000+</option>
-                </select>
+                  className="w-full px-4 py-3 border border-gray-200 rounded-xl bg-gray-50 text-gray-700"
+                  placeholder="Select timeline first"
+                />
               </div>
 
+              {/* Timeline - Right Side */}
               <div>
                 <label htmlFor="timeline" className="flex items-center text-sm font-medium text-gray-700 mb-2">
                   <Calendar className="w-4 h-4 mr-2" />
-                  Timeline *
+                  Project Timeline *
                 </label>
                 <select
                   id="timeline"
@@ -477,10 +619,10 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 >
                   <option value="">Select timeline</option>
-                  <option value="ASAP">ASAP</option>
-                  <option value="1-2 weeks">1-2 weeks</option>
-                  <option value="2-4 weeks">2-4 weeks</option>
-                  <option value="1-2 months">1-2 months</option>
+                  <option value="1-2 weeks">1-2 Weeks</option>
+                  <option value="2-4 weeks">2-4 Weeks</option>
+                  <option value="1-2 months">1-2 Months</option>
+                  <option value="ASAP">ASAP (Express)</option>
                 </select>
               </div>
             </div>

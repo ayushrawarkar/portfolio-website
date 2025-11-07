@@ -45,7 +45,7 @@ export default function TemplatesPage() {
             description: 'Collaborative platform template for communities, teams, and organizations to showcase collective work.',
             icon: Briefcase,
             image: '/images/templates/template3.jpg',
-            liveUrl: 'https://template-design-gamma.vercel.app/',
+            liveUrl: 'https://community-portfolio-orpin.vercel.app/',
             features: ['Member Profiles', 'Collaborative Spaces', 'Team Showcases', 'Community Engagement'],
             rating: 5,
             category: 'community'
