@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown, Info, X, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ContactForm from '@/components/ContactForm';
@@ -14,6 +14,10 @@ export default function TemplatesPage() {
     const [isContactFormOpen, setIsContactFormOpen] = useState(false);
     const [selectedTemplate, setSelectedTemplate] = useState(null);
     const [selectedPackage, setSelectedPackage] = useState(null);
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    const [selectedTemplateDetails, setSelectedTemplateDetails] = useState(null);
+    const [isPackageModalOpen, setIsPackageModalOpen] = useState(false);
+    const [selectedPackageDetails, setSelectedPackageDetails] = useState(null);
 
     // Template data with actual image paths
     const templates = [
@@ -26,7 +30,16 @@ export default function TemplatesPage() {
             liveUrl: 'https://academic-portfolio-ivory-theta.vercel.app/',
             features: ['Code Display', 'Project Showcases', 'Skills Visualization', 'GitHub Integration'],
             rating: 5,
-            category: 'developer'
+            category: 'developer',
+            detailedFeatures: [
+                'Responsive design for all devices',
+                'Code syntax highlighting',
+                'Project showcase with filters',
+                'Skills and technologies section',
+                'GitHub integration',
+                'Dark/Light mode toggle'
+            ],
+            technologies: ['Next.js', 'React', 'Tailwind CSS']
         },
         {
             id: 2,
@@ -37,7 +50,16 @@ export default function TemplatesPage() {
             liveUrl: 'https://profile-template-iota.vercel.app/',
             features: ['Responsive Design', 'Project Gallery', 'About Section', 'Contact Form'],
             rating: 4,
-            category: 'personal'
+            category: 'personal',
+            detailedFeatures: [
+                'Full-screen hero section',
+                'Image and video gallery',
+                'About me section',
+                'Testimonials slider',
+                'Blog integration ready',
+                'Social media integration'
+            ],
+            technologies: ['React', 'CSS3', 'JavaScript']
         },
         {
             id: 3,
@@ -48,7 +70,16 @@ export default function TemplatesPage() {
             liveUrl: 'https://community-portfolio-orpin.vercel.app/',
             features: ['Member Profiles', 'Collaborative Spaces', 'Team Showcases', 'Community Engagement'],
             rating: 5,
-            category: 'community'
+            category: 'community',
+            detailedFeatures: [
+                'Multi-user profiles',
+                'Team collaboration spaces',
+                'Project management dashboard',
+                'Member directory',
+                'Event calendar',
+                'Discussion forums'
+            ],
+            technologies: ['Next.js', 'MongoDB', 'Socket.io']
         }
     ];
 
@@ -69,7 +100,20 @@ export default function TemplatesPage() {
                 '1 round of revisions'
             ],
             delivery: '3-5 days',
-            popular: false
+            popular: false,
+            detailedDescription: 'Ideal for clients who have found a template they love but need some personal touches to make it their own. We handle all the technical details while you focus on your content.',
+            fullFeatures: [
+                'Template selection from our collection',
+                'Custom color palette implementation',
+                'Logo and branding integration',
+                'Content population and optimization',
+                'Basic responsive adjustments',
+                'Contact form configuration',
+                'Social media links setup',
+                '1 round of minor revisions',
+                'Basic SEO setup',
+                'Google Analytics integration'
+            ]
         },
         {
             id: 2,
@@ -87,7 +131,21 @@ export default function TemplatesPage() {
                 'Priority support'
             ],
             delivery: '7-10 days',
-            popular: true
+            popular: true,
+            detailedDescription: 'Perfect for clients who want to stand out with unique features and custom functionality. We transform our templates into something truly unique for your brand.',
+            fullFeatures: [
+                'Deep template customization',
+                'Custom animation development',
+                'Advanced interactive features',
+                'Multiple page template designs',
+                'Advanced SEO optimization',
+                'Performance optimization',
+                'Custom form development',
+                'Third-party API integrations',
+                '3 rounds of comprehensive revisions',
+                'Priority email support',
+                'Training session handover'
+            ]
         },
         {
             id: 3,
@@ -106,7 +164,23 @@ export default function TemplatesPage() {
                 '1 year support'
             ],
             delivery: '14-21 days',
-            popular: false
+            popular: false,
+            detailedDescription: 'The ultimate solution for clients who want a completely unique portfolio built from the ground up. Every pixel is designed specifically for your needs and brand identity.',
+            fullFeatures: [
+                'Complete custom design from scratch',
+                'Wireframing and prototyping phase',
+                'Custom illustration and graphics',
+                'Advanced animation systems',
+                'E-commerce functionality ready',
+                'Admin dashboard development',
+                'Custom backend integrations',
+                'Advanced security features',
+                'Unlimited revisions for 1 year',
+                'Dedicated project manager',
+                '24/7 priority support',
+                '1 year maintenance and updates',
+                'Comprehensive documentation'
+            ]
         }
     ];
 
@@ -134,6 +208,40 @@ export default function TemplatesPage() {
         setIsContactFormOpen(false);
         setSelectedTemplate(null);
         setSelectedPackage(null);
+    };
+
+    // New function to handle view details
+    const handleViewDetails = (template) => {
+        setSelectedTemplateDetails(template);
+        setIsDetailModalOpen(true);
+    };
+
+    const handleCloseDetailModal = () => {
+        setIsDetailModalOpen(false);
+        setSelectedTemplateDetails(null);
+    };
+
+    const handleContactFromDetails = () => {
+        setIsDetailModalOpen(false);
+        setSelectedTemplate(selectedTemplateDetails);
+        setIsContactFormOpen(true);
+    };
+
+    // Package detail functions
+    const handleViewPackageDetails = (pkg) => {
+        setSelectedPackageDetails(pkg);
+        setIsPackageModalOpen(true);
+    };
+
+    const handleClosePackageModal = () => {
+        setIsPackageModalOpen(false);
+        setSelectedPackageDetails(null);
+    };
+
+    const handleContactFromPackageDetails = () => {
+        setIsPackageModalOpen(false);
+        setSelectedPackage(selectedPackageDetails);
+        setIsContactFormOpen(true);
     };
 
     // Animation variants
@@ -436,21 +544,33 @@ export default function TemplatesPage() {
                                                     View Live Demo
                                                 </span>
                                             </motion.button>
-                                            
-                                            {/* INDIVIDUAL TEMPLATE CONTACT BUTTON */}
-                                            <motion.button
-                                                className="w-full py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/contact"
-                                                whileHover="hover"
-                                                whileTap="tap"
-                                                variants={buttonHoverVariants}
-                                                onClick={() => handleContactClick(template)}
-                                            >
-                                                <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/contact:translate-x-full transition-transform duration-700" />
-                                                <span className="relative z-10 flex items-center justify-center">
-                                                    <MessageCircle className="w-4 h-4 mr-2" />
-                                                    Contact About This Template
-                                                </span>
-                                            </motion.button>
+
+                                            {/* Small More Button */}
+                                            <div className="flex space-x-3">
+                                                <motion.button
+                                                    className="flex-1 py-2.5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all duration-300 border border-gray-200"
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={() => handleViewDetails(template)}
+                                                >
+                                                    <div className="flex items-center justify-center space-x-1">
+                                                        <Info className="w-3 h-3" />
+                                                        <span className="text-sm">More</span>
+                                                    </div>
+                                                </motion.button>
+                                                
+                                                <motion.button
+                                                    className="flex-1 py-2.5 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                                                    whileHover={{ scale: 1.02 }}
+                                                    whileTap={{ scale: 0.98 }}
+                                                    onClick={() => handleContactClick(template)}
+                                                >
+                                                    <div className="flex items-center justify-center space-x-1">
+                                                        <MessageCircle className="w-3 h-3" />
+                                                        <span className="text-sm">Contact</span>
+                                                    </div>
+                                                </motion.button>
+                                            </div>
                                         </div>
                                     </div>
                                 </motion.div>
@@ -458,8 +578,6 @@ export default function TemplatesPage() {
                         ))}
                     </AnimatePresence>
                 </motion.div>
-
-        
 
                 {/* Custom Development Section */}
                 <motion.section
@@ -556,7 +674,7 @@ export default function TemplatesPage() {
                                             {pkg.description}
                                         </p>
 
-                                        <div className="space-y-3 mb-8">
+                                        <div className="space-y-3 mb-6">
                                             {pkg.features.map((feature, idx) => (
                                                 <motion.div
                                                     key={idx}
@@ -578,68 +696,276 @@ export default function TemplatesPage() {
                                             ))}
                                         </div>
 
-                                        {/* CTA Button */}
-                                        <motion.button
-                                            className={`w-full py-4 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn ${pkg.popular
-                                                ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white'
-                                                : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                                                }`}
-                                            whileHover={{ scale: 1.02 }}
-                                            whileTap={{ scale: 0.98 }}
-                                            onClick={() => handleCustomContact(pkg)}
-                                        >
-                                            <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-                                            <span className="relative z-10 flex items-center justify-center">
-                                                <MessageCircle className="w-4 h-4 mr-2" />
-                                                Get This Package
-                                            </span>
-                                        </motion.button>
+                                        {/* CTA Buttons */}
+                                        <div className="space-y-3">
+                                            <motion.button
+                                                className={`w-full py-3 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn ${pkg.popular
+                                                    ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white'
+                                                    : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
+                                                    }`}
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                onClick={() => handleCustomContact(pkg)}
+                                            >
+                                                <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+                                                <span className="relative z-10 flex items-center justify-center">
+                                                    <MessageCircle className="w-4 h-4 mr-2" />
+                                                    Get This Package
+                                                </span>
+                                            </motion.button>
+
+                                            {/* More Button for Packages */}
+                                            <motion.button
+                                                className="w-full py-2.5 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all duration-300 border border-gray-200"
+                                                whileHover={{ scale: 1.02 }}
+                                                whileTap={{ scale: 0.98 }}
+                                                onClick={() => handleViewPackageDetails(pkg)}
+                                            >
+                                                <div className="flex items-center justify-center space-x-1">
+                                                    <Info className="w-3 h-3" />
+                                                    <span className="text-sm">More Details</span>
+                                                </div>
+                                            </motion.button>
+                                        </div>
                                     </div>
                                 </motion.div>
                             </motion.div>
                         ))}
                     </motion.div>
 
-                            {/* Standard Contact Button Section */}
-                <motion.div
-                    className="text-center mt-20 mb-24"
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
-                >
-                    <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 border border-white/40 shadow-xl relative overflow-hidden">
-                        {/* Background glow */}
-                        <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
-                        <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl" />
+                    {/* Standard Contact Button Section */}
+                    <motion.div
+                        className="text-center mt-20 mb-24"
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
+                    >
+                        <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 border border-white/40 shadow-xl relative overflow-hidden">
+                            {/* Background glow */}
+                            <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
+                            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl" />
 
-                        <motion.h3
-                            className="text-3xl font-bold text-slate-900 mb-4"
-                            animate={{ scale: [1, 1.02, 1] }}
-                            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                        >
-                            Ready to Get Started?
-                        </motion.h3>
-                        <motion.p
-                            className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto leading-relaxed"
-                            animate={{ opacity: [0.8, 1, 0.8] }}
-                            transition={{ duration: 3, repeat: Infinity }}
-                        >
-                            Found a template you like? Contact us to get your portfolio set up and customized to your needs.
-                        </motion.p>
-                        <motion.button
-                            className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
-                            whileHover={{ scale: 1.05, y: -3 }}
-                            whileTap={{ scale: 0.98 }}
-                            onClick={() => handleContactClick()} // General inquiry
-                        >
-                            <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                            <MessageCircle className="w-5 h-5 mr-3 relative z-10" />
-                            <span className="relative z-10 text-lg">Contact Us to Get Started</span>
-                        </motion.button>
-                    </div>
-                </motion.div>
+                            <motion.h3
+                                className="text-3xl font-bold text-slate-900 mb-4"
+                                animate={{ scale: [1, 1.02, 1] }}
+                                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                Ready to Get Started?
+                            </motion.h3>
+                            <motion.p
+                                className="text-xl text-slate-700 mb-8 max-w-2xl mx-auto leading-relaxed"
+                                animate={{ opacity: [0.8, 1, 0.8] }}
+                                transition={{ duration: 3, repeat: Infinity }}
+                            >
+                                Found a template you like? Contact us to get your portfolio set up and customized to your needs.
+                            </motion.p>
+                            <motion.button
+                                className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
+                                whileHover={{ scale: 1.05, y: -3 }}
+                                whileTap={{ scale: 0.98 }}
+                                onClick={() => handleContactClick()} // General inquiry
+                            >
+                                <span className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                                <MessageCircle className="w-5 h-5 mr-3 relative z-10" />
+                                <span className="relative z-10 text-lg">Contact Us to Get Started</span>
+                            </motion.button>
+                        </div>
+                    </motion.div>
                 </motion.section>
             </main>
+
+            {/* Template Detail Modal */}
+            <AnimatePresence>
+                {isDetailModalOpen && selectedTemplateDetails && (
+                    <motion.div
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <motion.div
+                            className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            transition={{ type: "spring", damping: 25 }}
+                        >
+                            {/* Modal Header */}
+                            <div className="relative p-6 border-b border-gray-200">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xl font-bold text-slate-900">
+                                        {selectedTemplateDetails.title}
+                                    </h3>
+                                    <motion.button
+                                        onClick={handleCloseDetailModal}
+                                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                    >
+                                        <X className="w-5 h-5 text-gray-500" />
+                                    </motion.button>
+                                </div>
+                                <div className="flex items-center space-x-4 mt-2">
+                                    <span className="px-3 py-1 bg-blue-100 text-blue-600 text-sm font-medium rounded-full">
+                                        {selectedTemplateDetails.category}
+                                    </span>
+                                    <div className="flex items-center space-x-1">
+                                        <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                                        <span className="text-sm text-slate-600">{selectedTemplateDetails.rating}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Modal Content */}
+                            <div className="p-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <h4 className="font-semibold text-slate-900 mb-2">Description</h4>
+                                        <p className="text-slate-600 text-sm leading-relaxed">
+                                            {selectedTemplateDetails.description}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-semibold text-slate-900 mb-2">Detailed Features</h4>
+                                        <div className="space-y-2">
+                                            {selectedTemplateDetails.detailedFeatures.map((feature, index) => (
+                                                <div key={index} className="flex items-start space-x-2">
+                                                    <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                                    <span className="text-slate-600 text-sm">{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-semibold text-slate-900 mb-2">Technologies</h4>
+                                        <div className="flex flex-wrap gap-2">
+                                            {selectedTemplateDetails.technologies.map((tech, index) => (
+                                                <span
+                                                    key={index}
+                                                    className="px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full border"
+                                                >
+                                                    {tech}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Modal Actions */}
+                                <div className="flex space-x-3 mt-6 pt-4 border-t border-gray-200">
+                                    <motion.button
+                                        className="flex-1 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all duration-300"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleCloseDetailModal}
+                                    >
+                                        Close
+                                    </motion.button>
+                                    <motion.button
+                                        className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleContactFromDetails}
+                                    >
+                                        Contact About This
+                                    </motion.button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
+            {/* Package Detail Modal */}
+            <AnimatePresence>
+                {isPackageModalOpen && selectedPackageDetails && (
+                    <motion.div
+                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <motion.div
+                            className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                            animate={{ scale: 1, opacity: 1, y: 0 }}
+                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                            transition={{ type: "spring", damping: 25 }}
+                        >
+                            {/* Modal Header */}
+                            <div className="relative p-6 border-b border-gray-200">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-xl font-bold text-slate-900">
+                                        {selectedPackageDetails.title}
+                                    </h3>
+                                    <motion.button
+                                        onClick={handleClosePackageModal}
+                                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                                        whileHover={{ scale: 1.1 }}
+                                        whileTap={{ scale: 0.9 }}
+                                    >
+                                        <X className="w-5 h-5 text-gray-500" />
+                                    </motion.button>
+                                </div>
+                                <div className="flex items-center space-x-4 mt-2">
+                                    <div className="text-2xl font-bold text-blue-600">
+                                        {selectedPackageDetails.price}
+                                    </div>
+                                    <span className="px-3 py-1 bg-green-100 text-green-600 text-sm font-medium rounded-full">
+                                        Delivery: {selectedPackageDetails.delivery}
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Modal Content */}
+                            <div className="p-6">
+                                <div className="space-y-4">
+                                    <div>
+                                        <h4 className="font-semibold text-slate-900 mb-2">Package Description</h4>
+                                        <p className="text-slate-600 text-sm leading-relaxed">
+                                            {selectedPackageDetails.detailedDescription}
+                                        </p>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-semibold text-slate-900 mb-2">Complete Features</h4>
+                                        <div className="space-y-2">
+                                            {selectedPackageDetails.fullFeatures.map((feature, index) => (
+                                                <div key={index} className="flex items-start space-x-2">
+                                                    <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                                                    <span className="text-slate-600 text-sm">{feature}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Modal Actions */}
+                                <div className="flex space-x-3 mt-6 pt-4 border-t border-gray-200">
+                                    <motion.button
+                                        className="flex-1 py-3 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-all duration-300"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleClosePackageModal}
+                                    >
+                                        Close
+                                    </motion.button>
+                                    <motion.button
+                                        className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                                        whileHover={{ scale: 1.02 }}
+                                        whileTap={{ scale: 0.98 }}
+                                        onClick={handleContactFromPackageDetails}
+                                    >
+                                        Get This Package
+                                    </motion.button>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <ContactForm
                 isOpen={isContactFormOpen}
