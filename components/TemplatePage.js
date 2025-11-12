@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown, Info, X, Check } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown, Info, X, Check, Heart, Hexagon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ContactForm from '@/components/ContactForm';
@@ -39,7 +39,10 @@ export default function TemplatesPage() {
                 'GitHub integration',
                 'Dark/Light mode toggle'
             ],
-            technologies: ['Next.js', 'React', 'Tailwind CSS']
+            technologies: ['Next.js', 'React', 'Tailwind CSS'],
+            gradient: 'from-teal-400 to-cyan-500',
+            bgColor: 'bg-teal-500/10',
+            borderColor: 'border-teal-200/50'
         },
         {
             id: 2,
@@ -59,7 +62,10 @@ export default function TemplatesPage() {
                 'Blog integration ready',
                 'Social media integration'
             ],
-            technologies: ['React', 'CSS3', 'JavaScript']
+            technologies: ['React', 'CSS3', 'JavaScript'],
+            gradient: 'from-coral-400 to-pink-500',
+            bgColor: 'bg-coral-500/10',
+            borderColor: 'border-coral-200/50'
         },
         {
             id: 3,
@@ -79,7 +85,10 @@ export default function TemplatesPage() {
                 'Event calendar',
                 'Discussion forums'
             ],
-            technologies: ['Next.js', 'MongoDB', 'Socket.io']
+            technologies: ['Next.js', 'MongoDB', 'Socket.io'],
+            gradient: 'from-indigo-400 to-purple-500',
+            bgColor: 'bg-indigo-500/10',
+            borderColor: 'border-indigo-200/50'
         }
     ];
 
@@ -113,7 +122,9 @@ export default function TemplatesPage() {
                 '1 round of minor revisions',
                 'Basic SEO setup',
                 'Google Analytics integration'
-            ]
+            ],
+            gradient: 'from-teal-500 to-cyan-500',
+            bgColor: 'bg-teal-500/10'
         },
         {
             id: 2,
@@ -145,7 +156,9 @@ export default function TemplatesPage() {
                 '3 rounds of comprehensive revisions',
                 'Priority email support',
                 'Training session handover'
-            ]
+            ],
+            gradient: 'from-coral-500 to-pink-500',
+            bgColor: 'bg-coral-500/10'
         },
         {
             id: 3,
@@ -180,7 +193,9 @@ export default function TemplatesPage() {
                 '24/7 priority support',
                 '1 year maintenance and updates',
                 'Comprehensive documentation'
-            ]
+            ],
+            gradient: 'from-indigo-500 to-purple-500',
+            bgColor: 'bg-indigo-500/10'
         }
     ];
 
@@ -306,16 +321,26 @@ export default function TemplatesPage() {
         }
     };
 
+    const pulseGlow = {
+        scale: [1, 1.2, 1],
+        opacity: [0.3, 0.6, 0.3],
+        transition: {
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-teal-50/20 overflow-hidden">
             {/* Animated Background Elements */}
             <div className="fixed inset-0 pointer-events-none">
                 <motion.div
-                    className="absolute top-20 left-10 w-64 h-64 bg-blue-200/20 rounded-full blur-3xl"
+                    className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-teal-400/20 to-cyan-400/20 rounded-full blur-3xl"
                     animate={floatingAnimation}
                 />
                 <motion.div
-                    className="absolute bottom-20 right-10 w-80 h-80 bg-purple-200/15 rounded-full blur-3xl"
+                    className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-coral-400/15 to-pink-400/15 rounded-full blur-3xl"
                     animate={{
                         y: [0, 15, 0],
                         transition: {
@@ -326,11 +351,15 @@ export default function TemplatesPage() {
                         }
                     }}
                 />
+                <motion.div
+                    className="absolute top-1/2 left-1/3 w-56 h-56 bg-gradient-to-r from-indigo-400/25 to-purple-400/25 rounded-full blur-3xl"
+                    animate={pulseGlow}
+                />
             </div>
 
             {/* Header */}
             <motion.header
-                className="relative z-50 p-4 sm:p-6 bg-white/60 backdrop-blur-lg border-b border-white/30 shadow-sm"
+                className="relative z-50 p-4 sm:p-6 bg-white/80 backdrop-blur-lg border-b border-white/30 shadow-sm"
                 initial={{ y: -80, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{
@@ -345,7 +374,7 @@ export default function TemplatesPage() {
                     <div className="flex items-center sm:flex-1 sm:justify-start">
                         <motion.button
                             onClick={handleHomeClick}
-                            className="group flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden"
+                            className="group flex items-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-xl shadow-sm hover:shadow-md transition-all duration-300 relative overflow-hidden"
                             whileHover="hover"
                             whileTap="tap"
                             variants={buttonHoverVariants}
@@ -362,7 +391,7 @@ export default function TemplatesPage() {
                         transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
                         className="sm:flex-1 sm:flex sm:justify-center"
                     >
-                        <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent text-center">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-teal-600 text-center">
                             Portfolio Templates
                         </h1>
                     </motion.div>
@@ -382,23 +411,11 @@ export default function TemplatesPage() {
                 >
                     <motion.h2
                         className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6"
-                        animate={{
-                            backgroundPosition: ['0% 0%', '100% 0%', '0% 0%']
-                        }}
-                        transition={{
-                            duration: 8,
-                            repeat: Infinity,
-                            ease: "linear"
-                        }}
-                        style={{
-                            background: 'linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #8b5cf6, #3b82f6)',
-                            backgroundSize: '400% 100%',
-                            backgroundClip: 'text',
-                            WebkitBackgroundClip: 'text',
-                            color: 'transparent'
-                        }}
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2, duration: 0.6 }}
                     >
-                        Choose Your Perfect Template
+                        Choose Your <span className="text-teal-600">Perfect Template</span>
                     </motion.h2>
                     <motion.p
                         className="text-xl text-slate-700 max-w-2xl mx-auto leading-relaxed"
@@ -429,11 +446,11 @@ export default function TemplatesPage() {
                                 onHoverEnd={() => setHoveredCard(null)}
                             >
                                 <motion.div
-                                    className="bg-white/70 backdrop-blur-lg rounded-3xl border border-white/40 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer relative"
+                                    className="bg-white/90 backdrop-blur-md rounded-3xl border-2 border-white/50 shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden cursor-pointer relative"
                                     variants={cardHoverVariants}
                                 >
                                     {/* Glow effect on hover */}
-                                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl" />
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${template.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-500 rounded-3xl`} />
 
                                     {/* Template Image */}
                                     <div className="relative h-48 bg-gray-100 overflow-hidden">
@@ -457,11 +474,11 @@ export default function TemplatesPage() {
                                             />
                                             {/* Fallback */}
                                             <div
-                                                className="hidden w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 items-center justify-center"
+                                                className="hidden w-full h-full bg-gradient-to-br from-teal-100 to-cyan-100 items-center justify-center"
                                                 style={{ display: 'none' }}
                                             >
-                                                <template.icon className="w-16 h-16 text-blue-600 opacity-50" />
-                                                <span className="absolute bottom-4 text-sm text-blue-600 font-medium">
+                                                <template.icon className="w-16 h-16 text-teal-600 opacity-50" />
+                                                <span className="absolute bottom-4 text-sm text-teal-600 font-medium">
                                                     Template Preview
                                                 </span>
                                             </div>
@@ -477,7 +494,7 @@ export default function TemplatesPage() {
                                             }}
                                             transition={{ type: "spring", stiffness: 500, damping: 20 }}
                                         >
-                                            <ExternalLink className="w-3 h-3 text-blue-600" />
+                                            <ExternalLink className="w-3 h-3 text-teal-600" />
                                         </motion.div>
                                     </div>
 
@@ -485,7 +502,7 @@ export default function TemplatesPage() {
                                     <div className="p-6 relative z-10">
                                         <div className="flex items-center justify-between mb-4">
                                             <motion.span
-                                                className="px-3 py-1.5 bg-blue-100 text-blue-600 text-sm font-medium rounded-full border border-blue-200/50"
+                                                className={`px-3 py-1.5 ${template.bgColor} text-teal-600 text-sm font-medium rounded-full border ${template.borderColor}`}
                                                 whileHover={{ scale: 1.05 }}
                                                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
                                             >
@@ -498,7 +515,7 @@ export default function TemplatesPage() {
                                         </div>
 
                                         <motion.h3
-                                            className="text-xl font-bold text-slate-900 mb-3 group-hover:text-blue-600 transition-colors duration-300"
+                                            className="text-xl font-bold text-slate-900 mb-3 group-hover:text-teal-600 transition-colors duration-300"
                                             whileHover={{ x: 2 }}
                                         >
                                             {template.title}
@@ -520,7 +537,7 @@ export default function TemplatesPage() {
                                                     whileHover={{ x: 5 }}
                                                 >
                                                     <motion.div
-                                                        className="w-1.5 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mr-3"
+                                                        className={`w-1.5 h-1.5 bg-gradient-to-r ${template.gradient} rounded-full mr-3`}
                                                         animate={{ scale: [1, 1.3, 1] }}
                                                         transition={{ duration: 2, repeat: Infinity, delay: idx * 0.3 }}
                                                     />
@@ -532,7 +549,7 @@ export default function TemplatesPage() {
                                         {/* CTA Buttons */}
                                         <div className="space-y-3">
                                             <motion.button
-                                                className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn"
+                                                className="w-full py-3.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn"
                                                 whileHover="hover"
                                                 whileTap="tap"
                                                 variants={buttonHoverVariants}
@@ -560,7 +577,7 @@ export default function TemplatesPage() {
                                                 </motion.button>
                                                 
                                                 <motion.button
-                                                    className="flex-1 py-2.5 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                                                    className="flex-1 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
                                                     whileHover={{ scale: 1.02 }}
                                                     whileTap={{ scale: 0.98 }}
                                                     onClick={() => handleContactClick(template)}
@@ -595,7 +612,7 @@ export default function TemplatesPage() {
                             transition={{ delay: 0.2, duration: 0.6 }}
                             viewport={{ once: true }}
                         >
-                            Want Something <span className="bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">Completely Custom?</span>
+                            Want Something <span className="text-coral-600">Completely Custom?</span>
                         </motion.h2>
                         <motion.p
                             className="text-xl text-slate-700 max-w-3xl mx-auto leading-relaxed"
@@ -625,7 +642,7 @@ export default function TemplatesPage() {
                                 {pkg.popular && (
                                     <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
                                         <motion.div
-                                            className="px-6 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white text-sm font-bold rounded-full shadow-lg"
+                                            className="px-6 py-2 bg-gradient-to-r from-coral-500 to-pink-500 text-white text-sm font-bold rounded-full shadow-lg"
                                             initial={{ scale: 0 }}
                                             animate={{ scale: 1 }}
                                             transition={{ delay: 0.8 + index * 0.1, type: "spring", stiffness: 300 }}
@@ -636,34 +653,28 @@ export default function TemplatesPage() {
                                 )}
 
                                 <motion.div
-                                    className={`bg-white/70 backdrop-blur-lg rounded-3xl border-2 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 relative ${pkg.popular
-                                        ? 'border-orange-400 scale-105'
+                                    className={`bg-white/90 backdrop-blur-md rounded-3xl border-2 overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 relative ${pkg.popular
+                                        ? 'border-coral-400 scale-105'
                                         : 'border-white/40'
                                         }`}
                                     whileHover={{ y: -5, scale: pkg.popular ? 1.08 : 1.02 }}
                                 >
                                     {/* Package Header */}
-                                    <div className={`p-8 text-center ${pkg.popular
-                                        ? 'bg-gradient-to-r from-orange-500 to-red-500'
-                                        : 'bg-gradient-to-r from-blue-600 to-purple-600'
-                                        }`}>
+                                    <div className={`p-8 text-center bg-gradient-to-r ${pkg.gradient}`}>
                                         <motion.div
                                             className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center mx-auto mb-4"
-                                            whileHover={{ rotate: 360 }}
-                                            transition={{ duration: 0.5 }}
+                                            whileHover={{ scale: 1.1 }}
+                                            transition={{ duration: 0.3 }}
                                         >
-                                            <pkg.icon className={`w-8 h-8 ${pkg.popular ? 'text-orange-100' : 'text-blue-100'
-                                                }`} />
+                                            <pkg.icon className="w-8 h-8 text-white" />
                                         </motion.div>
-                                        <h3 className={`text-2xl font-bold ${pkg.popular ? 'text-white' : 'text-white'
-                                            } mb-2`}>
+                                        <h3 className="text-2xl font-bold text-white mb-2">
                                             {pkg.title}
                                         </h3>
                                         <div className="text-3xl font-bold text-white mb-2">
                                             {pkg.price}
                                         </div>
-                                        <p className={`text-sm ${pkg.popular ? 'text-orange-100' : 'text-blue-100'
-                                            }`}>
+                                        <p className="text-white/90 text-sm">
                                             Delivery: {pkg.delivery}
                                         </p>
                                     </div>
@@ -684,10 +695,7 @@ export default function TemplatesPage() {
                                                     transition={{ delay: 1 + (idx * 0.1) }}
                                                 >
                                                     <motion.div
-                                                        className={`w-2 h-2 rounded-full mr-3 ${pkg.popular
-                                                            ? 'bg-gradient-to-r from-orange-500 to-red-500'
-                                                            : 'bg-gradient-to-r from-blue-500 to-purple-500'
-                                                            }`}
+                                                        className={`w-2 h-2 rounded-full mr-3 bg-gradient-to-r ${pkg.gradient}`}
                                                         animate={{ scale: [1, 1.2, 1] }}
                                                         transition={{ duration: 2, repeat: Infinity, delay: idx * 0.2 }}
                                                     />
@@ -699,10 +707,7 @@ export default function TemplatesPage() {
                                         {/* CTA Buttons */}
                                         <div className="space-y-3">
                                             <motion.button
-                                                className={`w-full py-3 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn ${pkg.popular
-                                                    ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white'
-                                                    : 'bg-gradient-to-r from-blue-600 to-purple-600 text-white'
-                                                    }`}
+                                                className={`w-full py-3 font-semibold rounded-xl hover:shadow-lg transition-all duration-300 relative overflow-hidden group/btn bg-gradient-to-r ${pkg.gradient} text-white`}
                                                 whileHover={{ scale: 1.02 }}
                                                 whileTap={{ scale: 0.98 }}
                                                 onClick={() => handleCustomContact(pkg)}
@@ -740,10 +745,10 @@ export default function TemplatesPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
                     >
-                        <div className="bg-white/60 backdrop-blur-lg rounded-3xl p-12 border border-white/40 shadow-xl relative overflow-hidden">
+                        <div className="bg-white/90 backdrop-blur-md rounded-3xl p-12 border-2 border-white/50 shadow-xl relative overflow-hidden">
                             {/* Background glow */}
-                            <div className="absolute -top-20 -right-20 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl" />
-                            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl" />
+                            <div className="absolute -top-20 -right-20 w-40 h-40 bg-teal-500/10 rounded-full blur-3xl" />
+                            <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl" />
 
                             <motion.h3
                                 className="text-3xl font-bold text-slate-900 mb-4"
@@ -760,7 +765,7 @@ export default function TemplatesPage() {
                                 Found a template you like? Contact us to get your portfolio set up and customized to your needs.
                             </motion.p>
                             <motion.button
-                                className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-green-600 to-blue-600 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
+                                className="inline-flex items-center px-10 py-5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 relative overflow-hidden group"
                                 whileHover={{ scale: 1.05, y: -3 }}
                                 whileTap={{ scale: 0.98 }}
                                 onClick={() => handleContactClick()} // General inquiry
@@ -806,7 +811,7 @@ export default function TemplatesPage() {
                                     </motion.button>
                                 </div>
                                 <div className="flex items-center space-x-4 mt-2">
-                                    <span className="px-3 py-1 bg-blue-100 text-blue-600 text-sm font-medium rounded-full">
+                                    <span className={`px-3 py-1 ${selectedTemplateDetails.bgColor} text-teal-600 text-sm font-medium rounded-full border ${selectedTemplateDetails.borderColor}`}>
                                         {selectedTemplateDetails.category}
                                     </span>
                                     <div className="flex items-center space-x-1">
@@ -864,7 +869,7 @@ export default function TemplatesPage() {
                                         Close
                                     </motion.button>
                                     <motion.button
-                                        className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                                        className="flex-1 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleContactFromDetails}
@@ -910,7 +915,7 @@ export default function TemplatesPage() {
                                     </motion.button>
                                 </div>
                                 <div className="flex items-center space-x-4 mt-2">
-                                    <div className="text-2xl font-bold text-blue-600">
+                                    <div className="text-2xl font-bold text-teal-600">
                                         {selectedPackageDetails.price}
                                     </div>
                                     <span className="px-3 py-1 bg-green-100 text-green-600 text-sm font-medium rounded-full">
@@ -953,7 +958,7 @@ export default function TemplatesPage() {
                                         Close
                                     </motion.button>
                                     <motion.button
-                                        className="flex-1 py-3 bg-gradient-to-r from-green-500 to-blue-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
+                                        className="flex-1 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-medium rounded-xl hover:shadow-lg transition-all duration-300"
                                         whileHover={{ scale: 1.02 }}
                                         whileTap={{ scale: 0.98 }}
                                         onClick={handleContactFromPackageDetails}
