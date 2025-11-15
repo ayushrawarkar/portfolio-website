@@ -291,17 +291,30 @@ export default function HomePage() {
     },
   ];
 
-  // Single client portfolio example
-  const clientPortfolio = {
-    name: "Dr. Anup Ingle",
-    role: "Assistant Professor At VIT Pune",
-    website: "https://www.anupingle.com/",
-    image: "https://www.anupingle.com/profile11.png",
-    rating: 5,
-  };
+  // Client portfolio examples - ADDED SECOND CLIENT
+  const clientPortfolios = [
+    {
+      name: "Dr. Anup Ingle",
+      role: "Assistant Professor At VIT Pune",
+      website: "https://www.anupingle.com/",
+      image: "https://www.anupingle.com/profile11.png",
+      rating: 5,
+      type: "Academic Portfolio",
+      gradient: "from-teal-400 to-cyan-500"
+    },
+    {
+      name: "Dr. Rishi Kulshresth",
+      role: "IPR & Brand Protection Lawyer",
+      website: "https://drrishikulshresth.com/wp/",
+      image: "https://drrishikulshresth.com/wp/wp-content/uploads/2024/07/Client_image1.jpg",
+      rating: 5,
+      type: "Personal Portfolio", 
+      gradient: "from-indigo-400 to-purple-500"
+    }
+  ];
 
-  const handleClientClick = () => {
-    window.open(clientPortfolio.website, '_blank', 'noopener,noreferrer');
+  const handleClientClick = (website) => {
+    window.open(website, '_blank', 'noopener,noreferrer');
   };
 
   const toggleMobileMenu = () => {
@@ -731,91 +744,98 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* Real Example Section */}
-      <section id="example" className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      {/* Real Example Section - UPDATED WITH TWO CLIENTS */}
+      <section id="example" className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-50px' }}>
           <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-12">
             <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-3 sm:mb-4">
               See Our <span className="text-pink-600">Work In Action</span>
             </h2>
             <p className="text-base sm:text-lg text-slate-700 max-w-2xl mx-auto px-2">
-              Check out this stunning portfolio we created for a professional developer.
+              Check out these stunning portfolios we created for our amazing clients.
             </p>
           </motion.div>
 
-          {/* Single Client Card */}
-          <div className="flex justify-center">
-            <motion.div
-              className="group cursor-pointer max-w-xs sm:max-w-sm w-full"
-              variants={itemVariants}
-              whileHover={{ scale: 1.01, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ type: "spring", stiffness: 100, damping: 15 }}
-              viewport={{ once: true, margin: '-30px' }}
-              onClick={handleClientClick}
-            >
-              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 text-center overflow-hidden">
-                {/* Client Avatar */}
-                <motion.div
-                  className="relative mx-auto mb-4 sm:mb-6 w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 p-1.5 sm:p-2 shadow-lg group-hover:shadow-xl transition-all duration-300"
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
-                    <img
-                      src={clientPortfolio.image}
-                      alt={clientPortfolio.name}
-                      className="w-full h-full rounded-full object-cover"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextSibling.style.display = 'flex';
-                      }}
-                    />
-                    <div className="w-full h-full rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 hidden items-center justify-center text-teal-600 font-bold text-lg sm:text-xl">
-                      AI
+          {/* Client Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+            {clientPortfolios.map((client, idx) => (
+              <motion.div
+                key={idx}
+                className="group cursor-pointer"
+                variants={itemVariants}
+                whileHover={{ scale: 1.01, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 100, damping: 15, delay: idx * 0.1 }}
+                viewport={{ once: true, margin: '-30px' }}
+                onClick={() => handleClientClick(client.website)}
+              >
+                <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 text-center overflow-hidden h-full">
+                  {/* Client Avatar */}
+                  <motion.div
+                    className="relative mx-auto mb-4 sm:mb-6 w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br p-1.5 sm:p-2 shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    style={{ backgroundImage: `linear-gradient(to bottom right, var(--tw-gradient-stops))` }}
+                    whileHover={{ scale: 1.03 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                      <img
+                        src={client.image}
+                        alt={client.name}
+                        className="w-full h-full rounded-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div className={`w-full h-full rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 hidden items-center justify-center text-teal-600 font-bold text-lg sm:text-xl`}>
+                        {client.name.split(' ').map(n => n[0]).join('')}
+                      </div>
                     </div>
+
+                    <motion.div
+                      className="absolute -top-1 -right-1 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-coral-400 to-pink-500 rounded-full flex items-center justify-center shadow-lg"
+                      whileHover={{ scale: 1.1 }}
+                    >
+                      <ExternalLink className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
+                    </motion.div>
+                  </motion.div>
+
+                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1 sm:mb-2">{client.name}</h3>
+                  <p className="text-teal-600 font-medium text-sm sm:text-base mb-2">{client.role}</p>
+                  <div className="inline-block px-3 py-1 bg-slate-100 rounded-full text-slate-700 text-xs font-medium mb-3 sm:mb-4">
+                    {client.type}
                   </div>
 
-                  <motion.div
-                    className="absolute -top-1 -right-1 w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-coral-400 to-pink-500 rounded-full flex items-center justify-center shadow-lg"
-                    whileHover={{ scale: 1.1 }}
+                  <div className="flex justify-center items-center mb-4 sm:mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        whileHover={{ scale: 1.05 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                      >
+                        <Star
+                          className={`w-4 h-4 sm:w-5 sm:h-5 ${i < client.rating
+                              ? 'fill-yellow-400 text-yellow-400'
+                              : 'fill-gray-300 text-gray-300'
+                            }`}
+                        />
+                      </motion.div>
+                    ))}
+                  </div>
+
+                  <motion.p
+                    className="text-slate-600 text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 font-medium"
+                    animate={{ opacity: [0.7, 1, 0.7] }}
+                    transition={{ duration: 2, repeat: Infinity }}
                   >
-                    <ExternalLink className="w-2 h-2 sm:w-3 sm:h-3 text-white" />
-                  </motion.div>
-                </motion.div>
-
-                <h3 className="text-lg sm:text-xl font-bold text-slate-900 mb-1 sm:mb-2">{clientPortfolio.name}</h3>
-                <p className="text-teal-600 font-medium text-sm sm:text-base mb-3 sm:mb-4">{clientPortfolio.role}</p>
-
-                <div className="flex justify-center items-center mb-4 sm:mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <motion.div
-                      key={i}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                    >
-                      <Star
-                        className={`w-4 h-4 sm:w-5 sm:h-5 ${i < clientPortfolio.rating
-                            ? 'fill-yellow-400 text-yellow-400'
-                            : 'fill-gray-300 text-gray-300'
-                          }`}
-                      />
-                    </motion.div>
-                  ))}
+                    <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
+                    Click to visit portfolio website
+                  </motion.p>
                 </div>
-
-                <motion.p
-                  className="text-slate-600 text-xs sm:text-sm flex items-center justify-center gap-1 sm:gap-2 font-medium"
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4" />
-                  Click to visit portfolio website
-                </motion.p>
-              </div>
-            </motion.div>
+              </motion.div>
+            ))}
           </div>
         </motion.div>
       </section>

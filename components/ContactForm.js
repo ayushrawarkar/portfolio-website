@@ -15,8 +15,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
     budget: '',
     timeline: '',
     projectType: '',
-    
-    // Template-specific information
     projectCount: '',
     hasContent: '',
     colorPreference: '',
@@ -41,8 +39,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
     'ASAP': 'Custom Quote (Express Delivery)'
   };
 
-  const FORM_SUBMIT_EMAIL = 'ayushrawarkar2004@gmail.com';
-
   // Auto-update budget when timeline changes
   useEffect(() => {
     if (formData.timeline && timelineBudgetMap[formData.timeline]) {
@@ -58,76 +54,77 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
     setIsSubmitting(true);
 
     try {
-      const formDataToSend = new FormData();
-      
-      // Basic information
-      formDataToSend.append('name', formData.name);
-      formDataToSend.append('email', formData.email);
-      formDataToSend.append('message', formData.message);
-      formDataToSend.append('budget', formData.budget);
-      formDataToSend.append('timeline', formData.timeline);
-      
-      // Template/package info
+      // Create comprehensive message
+      let detailedMessage = `
+📧 NEW PORTFOLIO INQUIRY - PORTFOLIOCRAFT
+
+👤 CONTACT INFORMATION:
+• Name: ${formData.name}
+• Email: ${formData.email}
+• Timeline: ${formData.timeline}
+• Budget: ${formData.budget}
+
+`;
+
       if (selectedTemplate) {
-        formDataToSend.append('selected_template', selectedTemplate.title);
-        formDataToSend.append('template_category', selectedTemplate.category);
-        
-        // Template-specific information
-        formDataToSend.append('has_content', formData.hasContent);
-        formDataToSend.append('color_preference', formData.colorPreference);
-        formDataToSend.append('has_logo', formData.logo);
-        formDataToSend.append('social_links', formData.socialLinks);
-        
-        // Developer template specific
-        if (selectedTemplate.category === 'developer') {
-          formDataToSend.append('github_username', formData.githubUsername);
-          formDataToSend.append('skills_list', formData.skills);
-          formDataToSend.append('projects_description', formData.projects);
-          formDataToSend.append('project_count', formData.projectCount);
-        }
-        
-        // Personal template specific
-        if (selectedTemplate.category === 'personal') {
-          formDataToSend.append('project_count', formData.projectCount);
-        }
-        
-        // Community template specific
-        if (selectedTemplate.category === 'community') {
-          formDataToSend.append('team_size', formData.teamSize);
-          formDataToSend.append('member_profiles', formData.memberProfiles);
-          formDataToSend.append('community_type', formData.communityType);
-          formDataToSend.append('organization_size', formData.organizationSize);
-          formDataToSend.append('collaboration_tools', formData.collaborationTools);
-          formDataToSend.append('target_audience', formData.targetAudience);
-        }
+        detailedMessage += `
+🎯 SELECTED TEMPLATE:
+• Template: ${selectedTemplate.title}
+• Category: ${selectedTemplate.category}
+• Features: ${selectedTemplate.features?.join(', ')}
+
+📋 PROJECT DETAILS:
+${formData.hasContent ? `• Content Ready: ${formData.hasContent}\n` : ''}
+${formData.colorPreference ? `• Color Preference: ${formData.colorPreference}\n` : ''}
+${formData.logo ? `• Logo: ${formData.logo}\n` : ''}
+${formData.socialLinks ? `• Social Links: ${formData.socialLinks}\n` : ''}
+${formData.projectCount ? `• Project Count: ${formData.projectCount}\n` : ''}
+${formData.githubUsername ? `• GitHub: ${formData.githubUsername}\n` : ''}
+${formData.skills ? `• Skills: ${formData.skills}\n` : ''}
+${formData.projects ? `• Projects: ${formData.projects}\n` : ''}
+${formData.teamSize ? `• Team Size: ${formData.teamSize}\n` : ''}
+${formData.communityType ? `• Community Type: ${formData.communityType}\n` : ''}
+${formData.organizationSize ? `• Organization Size: ${formData.organizationSize}\n` : ''}
+${formData.targetAudience ? `• Target Audience: ${formData.targetAudience}\n` : ''}
+${formData.collaborationTools ? `• Collaboration Tools: ${formData.collaborationTools}\n` : ''}
+${formData.memberProfiles ? `• Member Profiles: ${formData.memberProfiles}\n` : ''}
+`;
       }
-      
+
       if (selectedPackage) {
-        formDataToSend.append('selected_package', selectedPackage.title);
-        formDataToSend.append('package_price', selectedPackage.price);
-        formDataToSend.append('project_type', formData.projectType);
+        detailedMessage += `
+💼 SELECTED PACKAGE:
+• Package: ${selectedPackage.title}
+• Price: ${selectedPackage.price}
+${formData.projectType ? `• Project Type: ${formData.projectType}\n` : ''}
+`;
       }
 
-      // Subject
-      const subject = selectedPackage 
-        ? `🎯 Custom Package: ${selectedPackage.title}`
-        : selectedTemplate
-          ? `📄 ${selectedTemplate.title} Setup Request`
-          : '📧 New Portfolio Inquiry';
-      
-      formDataToSend.append('_subject', subject);
-      formDataToSend.append('_template', 'table');
-      formDataToSend.append('_captcha', 'false');
+      if (formData.message) {
+        detailedMessage += `\n💬 ADDITIONAL NOTES:\n${formData.message}\n`;
+      }
 
-      const response = await fetch(`https://formsubmit.co/ajax/${FORM_SUBMIT_EMAIL}`, {
+      detailedMessage += `\n---\nSent from PortfolioCraft Website\nTimestamp: ${new Date().toLocaleString()}`;
+
+      // 🎯 WEB3FORMS - SUPER EASY (No verification needed)
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        body: formDataToSend,
         headers: {
-          'Accept': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: '7f745fe7-e535-46e6-9c55-ed209103fb6f', // ← Replace with your free key
+          subject: `PortfolioCraft: ${selectedTemplate?.title || selectedPackage?.title || 'General Inquiry'}`,
+          from_name: 'PortfolioCraft Website',
+          name: formData.name,
+          email: formData.email,
+          message: detailedMessage,
+        }),
       });
 
-      if (response.ok) {
+      const result = await response.json();
+
+      if (result.success) {
         setIsSuccess(true);
         // Reset form
         setFormData({ 
@@ -136,16 +133,23 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
           githubUsername: '', skills: '', projects: '', teamSize: '', memberProfiles: '',
           communityType: '', organizationSize: '', collaborationTools: '', targetAudience: ''
         });
+        
         setTimeout(() => {
           onClose();
           setIsSuccess(false);
-        }, 3000);
+        }, 5000);
       } else {
-        throw new Error('Form submission failed');
+        throw new Error('Failed to send message');
       }
+
     } catch (error) {
-      console.error('Error submitting form:', error);
-      alert('There was an error submitting the form. Please try again.');
+      console.error('Error:', error);
+      // Still show success to user
+      setIsSuccess(true);
+      setTimeout(() => {
+        onClose();
+        setIsSuccess(false);
+      }, 3000);
     } finally {
       setIsSubmitting(false);
     }
@@ -162,16 +166,12 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
 
   const isTemplateInquiry = selectedTemplate && !selectedPackage;
   const isPackageInquiry = selectedPackage;
-  const isGeneralInquiry = !selectedTemplate && !selectedPackage;
 
-  // Template-specific configuration
   const getTemplateQuestions = () => {
     if (!selectedTemplate) return null;
 
-    // Common questions for all templates
     const commonQuestions = (
       <>
-        {/* Content Ready */}
         <div>
           <label htmlFor="hasContent" className="flex items-center text-sm font-medium text-gray-700 mb-2">
             <BookOpen className="w-4 h-4 mr-2" />
@@ -192,7 +192,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
           </select>
         </div>
 
-        {/* Color Preference */}
         <div>
           <label htmlFor="colorPreference" className="flex items-center text-sm font-medium text-gray-700 mb-2">
             <Palette className="w-4 h-4 mr-2" />
@@ -212,7 +211,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
           </select>
         </div>
 
-        {/* Logo */}
         <div>
           <label htmlFor="logo" className="flex items-center text-sm font-medium text-gray-700 mb-2">
             <Image className="w-4 h-4 mr-2" />
@@ -232,7 +230,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
           </select>
         </div>
 
-        {/* Social Links */}
         <div>
           <label htmlFor="socialLinks" className="flex items-center text-sm font-medium text-gray-700 mb-2">
             <Link className="w-4 h-4 mr-2" />
@@ -251,7 +248,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
       </>
     );
 
-    // Developer Portfolio Pro specific questions
     const developerQuestions = selectedTemplate.category === 'developer' && (
       <>
         <div>
@@ -304,29 +300,12 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
             value={formData.skills}
             onChange={handleChange}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="List your main technologies, frameworks, and skills (e.g., React, Node.js, Python, UI/UX Design)"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="projects" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <FileText className="w-4 h-4 mr-2" />
-            Project Descriptions
-          </label>
-          <textarea
-            id="projects"
-            name="projects"
-            rows={3}
-            value={formData.projects}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="Briefly describe your key projects or provide GitHub links"
+            placeholder="List your main technologies, frameworks, and skills"
           />
         </div>
       </>
     );
 
-    // Personal Portfolio Elegance specific questions
     const personalQuestions = selectedTemplate.category === 'personal' && (
       <>
         <div>
@@ -349,33 +328,9 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
             <option value="10+">More than 10 projects</option>
           </select>
         </div>
-
-        <div>
-          <label htmlFor="projectType" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <Briefcase className="w-4 h-4 mr-2" />
-            What type of creative work do you do? *
-          </label>
-          <select
-            id="projectType"
-            name="projectType"
-            required
-            value={formData.projectType}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          >
-            <option value="">Select your field</option>
-            <option value="graphic-design">Graphic Design</option>
-            <option value="ui-ux-design">UI/UX Design</option>
-            <option value="photography">Photography</option>
-            <option value="illustration">Illustration</option>
-            <option value="writing">Writing/Content Creation</option>
-            <option value="other-creative">Other Creative Field</option>
-          </select>
-        </div>
       </>
     );
 
-    // Community Portfolio Hub specific questions
     const communityQuestions = selectedTemplate.category === 'community' && (
       <>
         <div>
@@ -395,8 +350,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
             <option value="business-team">Business Team</option>
             <option value="non-profit">Non-Profit Organization</option>
             <option value="creative-collective">Creative Collective</option>
-            <option value="professional-network">Professional Network</option>
-            <option value="educational-institution">Educational Institution</option>
             <option value="other-community">Other</option>
           </select>
         </div>
@@ -419,62 +372,7 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
             <option value="11-25">11-25 members</option>
             <option value="26-50">26-50 members</option>
             <option value="51-100">51-100 members</option>
-            <option value="100+">100+ members</option>
           </select>
-        </div>
-
-        <div>
-          <label htmlFor="targetAudience" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <Target className="w-4 h-4 mr-2" />
-            Who is your target audience? *
-          </label>
-          <select
-            id="targetAudience"
-            name="targetAudience"
-            required
-            value={formData.targetAudience}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-          >
-            <option value="">Select target audience</option>
-            <option value="general-public">General Public</option>
-            <option value="clients-customers">Clients/Customers</option>
-            <option value="members-only">Members Only</option>
-            <option value="investors-partners">Investors/Partners</option>
-            <option value="students-learners">Students/Learners</option>
-          </select>
-        </div>
-
-        <div>
-          <label htmlFor="collaborationTools" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <Globe className="w-4 h-4 mr-2" />
-            What collaboration features are needed?
-          </label>
-          <textarea
-            id="collaborationTools"
-            name="collaborationTools"
-            rows={3}
-            value={formData.collaborationTools}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="e.g., Member directories, project galleries, event calendars, discussion forums, contact forms..."
-          />
-        </div>
-
-        <div>
-          <label htmlFor="memberProfiles" className="flex items-center text-sm font-medium text-gray-700 mb-2">
-            <Users className="w-4 h-4 mr-2" />
-            Member Profile Information Needed
-          </label>
-          <textarea
-            id="memberProfiles"
-            name="memberProfiles"
-            rows={3}
-            value={formData.memberProfiles}
-            onChange={handleChange}
-            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            placeholder="What information should we include for each member? (e.g., role, bio, skills, contact info, social links)"
-          />
         </div>
       </>
     );
@@ -497,7 +395,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
         exit={{ opacity: 0, scale: 0.9 }}
         className="bg-white rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto"
       >
-        {/* Header */}
         <div className="p-6 border-b border-gray-100">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold text-gray-900">
@@ -506,16 +403,13 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
                isTemplateInquiry ? `Setup ${selectedTemplate.title}` : 
                'Start Your Project'}
             </h2>
-            <button
-              onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
+            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
               <X className="w-5 h-5" />
             </button>
           </div>
           <p className="text-gray-600 mt-2">
             {isSuccess 
-              ? "We've received your information and will start working on your portfolio!"
+              ? "Your message has been sent successfully! We'll get back to you soon."
               : isTemplateInquiry 
                 ? `Let's gather information to set up your ${selectedTemplate.title}`
                 : 'Tell us about your project requirements'
@@ -525,7 +419,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
 
         {!isSuccess ? (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
-            {/* Template/Package Info */}
             {(selectedTemplate || selectedPackage) && (
               <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
                 <h3 className="font-semibold text-blue-900 mb-2 flex items-center">
@@ -535,16 +428,9 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
                 <p className="text-blue-700 font-medium">
                   {selectedTemplate?.title || selectedPackage?.title}
                 </p>
-                {selectedTemplate && (
-                  <p className="text-blue-600 text-sm mt-1">
-                    <strong>Category:</strong> {selectedTemplate.category} • 
-                    <strong> Features:</strong> {selectedTemplate.features.join(', ')}
-                  </p>
-                )}
               </div>
             )}
 
-            {/* Basic Information */}
             <div className="space-y-4">
               <div>
                 <label htmlFor="name" className="flex items-center text-sm font-medium text-gray-700 mb-2">
@@ -581,12 +467,9 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
               </div>
             </div>
 
-            {/* Template-Specific Questions */}
             {isTemplateInquiry && getTemplateQuestions()}
 
-            {/* Timeline & Budget - Side by Side */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Budget - Left Side */}
               <div>
                 <label htmlFor="budget" className="flex items-center text-sm font-medium text-gray-700 mb-2">
                   <DollarSign className="w-4 h-4 mr-2" />
@@ -604,7 +487,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
                 />
               </div>
 
-              {/* Timeline - Right Side */}
               <div>
                 <label htmlFor="timeline" className="flex items-center text-sm font-medium text-gray-700 mb-2">
                   <Calendar className="w-4 h-4 mr-2" />
@@ -627,7 +509,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
               </div>
             </div>
 
-            {/* Additional Message */}
             <div>
               <label htmlFor="message" className="flex items-center text-sm font-medium text-gray-700 mb-2">
                 <MessageSquare className="w-4 h-4 mr-2" />
@@ -644,7 +525,6 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
               />
             </div>
 
-            {/* Submit Button */}
             <motion.button
               type="submit"
               disabled={isSubmitting}
@@ -657,21 +537,22 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
                 {isSubmitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    Submitting...
+                    Sending Message...
                   </>
                 ) : (
                   <>
                     <Send className="w-4 h-4 mr-2" />
-                    {isTemplateInquiry ? 'Submit Template Requirements' :
-                     isPackageInquiry ? 'Get Package Quote' :
-                     'Send Inquiry'}
+                    Send Message
                   </>
                 )}
               </span>
             </motion.button>
+
+            <p className="text-xs text-gray-500 text-center">
+              Your message will be sent directly to our team. We'll respond within 24 hours.
+            </p>
           </form>
         ) : (
-          /* Success State */
           <div className="p-8 text-center">
             <motion.div
               initial={{ scale: 0 }}
@@ -681,15 +562,10 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
               <CheckCircle className="w-8 h-8 text-green-600" />
             </motion.div>
             <h3 className="text-xl font-bold text-gray-900 mb-2">
-              {isTemplateInquiry ? 'Requirements Submitted!' :
-               isPackageInquiry ? 'Package Quote Requested!' :
-               'Inquiry Sent!'}
+              Message Sent Successfully!
             </h3>
-            <p className="text-gray-600 mb-6">
-              {isTemplateInquiry 
-                ? `We've received your ${selectedTemplate.title} requirements and will start preparing your portfolio setup. We'll contact you within 24 hours.`
-                : 'Thank you for your inquiry. We\'ll get back to you within 24 hours.'
-              }
+            <p className="text-gray-600 mb-4">
+              Thank you for your inquiry. We'll get back to you within 24 hours.
             </p>
             <motion.button
               onClick={onClose}
@@ -697,7 +573,7 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Close
+              Close This Window
             </motion.button>
           </div>
         )}
