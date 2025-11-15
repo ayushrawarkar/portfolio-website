@@ -35,9 +35,9 @@ export default function ContactForm({ isOpen, onClose, selectedTemplate, selecte
 
   // Timeline to budget mapping
   const timelineBudgetMap = {
-    '1-2 weeks': '$5,000 - $10,000',
-    '2-4 weeks': '$3,000 - $7,000', 
-    '1-2 months': '$1,000 - $3,000',
+    '1-2 weeks': '₹5,000 - ₹10,000',
+    '2-4 weeks': '₹3,000 - ₹7,000', 
+    '1-2 months': '₹1,000 - ₹3,000',
     'ASAP': 'Custom Quote (Express Delivery)'
   };
 
