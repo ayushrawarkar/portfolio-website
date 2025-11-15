@@ -309,17 +309,20 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/20 to-teal-50/20 overflow-hidden" ref={containerRef}>
-      {/* Background elements - OPTIMIZED FOR MOBILE */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50/40 to-teal-50/60 overflow-hidden" ref={containerRef}>
+      {/* IMPROVED BACKGROUND - Vibrant but light for mobile */}
       <div className="fixed inset-0 pointer-events-none" style={{ willChange: 'transform' }}>
-        {/* Floating Geometric Shapes - Reduced for mobile */}
+        {/* Main light gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/80 via-cyan-50/60 to-teal-50/70" />
+        
+        {/* Beautiful floating shapes with optimized colors for mobile */}
         <motion.div
-          className="absolute top-20 left-4 w-48 h-48 sm:w-72 sm:h-72 bg-gradient-to-r from-teal-400/20 to-cyan-400/20 rounded-full blur-2xl sm:blur-3xl"
+          className="absolute top-20 left-4 w-48 h-48 sm:w-72 sm:h-72 bg-gradient-to-r from-teal-300/40 to-cyan-400/30 rounded-full blur-2xl sm:blur-3xl"
           style={{ x: mousePosition.x * 0.02, y: mousePosition.y * 0.02 }}
           animate={floatingAnimation}
         />
         <motion.div
-          className="absolute top-1/3 right-4 w-56 h-56 sm:w-96 sm:h-96 bg-gradient-to-r from-coral-400/15 to-pink-400/15 rounded-full blur-2xl sm:blur-3xl"
+          className="absolute top-1/3 right-4 w-56 h-56 sm:w-96 sm:h-96 bg-gradient-to-r from-rose-300/30 to-pink-400/25 rounded-full blur-2xl sm:blur-3xl"
           style={{ x: mousePosition.x * -0.025, y: mousePosition.y * -0.025 }}
           animate={{
             y: [0, -30, 0],
@@ -327,10 +330,23 @@ export default function HomePage() {
           }}
         />
         <motion.div
-          className="absolute bottom-32 left-1/4 w-40 h-40 sm:w-64 sm:h-64 bg-gradient-to-r from-indigo-400/20 to-purple-400/20 rounded-full blur-2xl sm:blur-3xl"
+          className="absolute bottom-32 left-1/4 w-40 h-40 sm:w-64 sm:h-64 bg-gradient-to-r from-indigo-300/35 to-purple-400/30 rounded-full blur-2xl sm:blur-3xl"
           style={{ x: mousePosition.x * 0.015, y: mousePosition.y * 0.015 }}
           animate={pulseGlow}
         />
+        
+        {/* Additional subtle shapes */}
+        <motion.div
+          className="absolute top-40 right-10 w-32 h-32 bg-gradient-to-r from-amber-200/20 to-yellow-300/15 rounded-full blur-xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 180, 360],
+            transition: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+          }}
+        />
+        
+        {/* Light overlay to ensure brightness */}
+        <div className="absolute inset-0 bg-white/20" />
       </div>
 
       {/* CENTERED NAVIGATION */}
@@ -373,7 +389,7 @@ export default function HomePage() {
           <div className="sm:hidden flex justify-center w-full">
             <motion.button
               onClick={toggleMobileMenu}
-              className="px-6 py-3 bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-xl text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-300"
+              className="px-6 py-3 bg-white/90 backdrop-blur-sm border border-gray-200/70 rounded-xl text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-300"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -385,21 +401,21 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu - Light background */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <motion.div
-              className="sm:hidden fixed top-0 left-0 right-0 bottom-0 bg-white/95 backdrop-blur-md z-50"
+              className="sm:hidden fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-50/95 to-cyan-50/90 backdrop-blur-md z-50"
               initial="closed"
               animate="open"
               exit="closed"
               variants={mobileMenuVariants}
             >
-              <div className="flex flex-col items-center justify-center h-full space-y-8 p-8">
+              <div className="relative z-10 flex flex-col items-center justify-center h-full space-y-8 p-8">
                 {/* Close Button */}
                 <motion.button
                   onClick={toggleMobileMenu}
-                  className="absolute top-6 right-6 p-2 text-slate-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="absolute top-6 right-6 p-2 text-slate-700 hover:bg-white/50 rounded-lg transition-colors backdrop-blur-sm"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
@@ -536,7 +552,8 @@ export default function HomePage() {
         </AnimatePresence>
       </motion.header>
 
-      {/* IMPROVED PORTFOLIO TEMPLATE GALLERY FOR MOBILE */}
+      {/* REST OF THE SECTIONS WITH BEAUTIFUL GRADIENT BACKGROUND */}
+      {/* Portfolio Template Gallery Section */}
       <section id="templates" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-12 sm:pb-20">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-50px' }}>
           <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16">
@@ -561,18 +578,9 @@ export default function HomePage() {
                 viewport={{ once: true, margin: '-30px' }}
               >
                 <motion.div
-                  className="relative p-4 sm:p-6 bg-white/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col"
+                  className="relative p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 h-full flex flex-col"
                   variants={cardHoverVariants}
                 >
-                  {/* Geometric Shape Background */}
-                  <motion.div
-                    className={`absolute -top-2 -right-2 sm:-top-4 sm:-right-4 w-12 h-12 sm:w-20 sm:h-20 bg-gradient-to-br ${service.gradient} opacity-10 rounded-full`}
-                    animate={{
-                      scale: [1, 1.1, 1],
-                      transition: { duration: 8, repeat: Infinity, ease: "linear" }
-                    }}
-                  />
-
                   {/* Service Icon */}
                   <motion.div
                     className={`w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br ${service.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300 mx-auto`}
@@ -611,7 +619,7 @@ export default function HomePage() {
           </div>
 
           <motion.div 
-            className="text-center mt-8 sm:mt-12 p-4 sm:p-6 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-teal-200/30 max-w-2xl mx-auto"
+            className="text-center mt-8 sm:mt-12 p-4 sm:p-6 bg-gradient-to-r from-teal-50/80 to-indigo-50/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/60 max-w-2xl mx-auto"
             variants={itemVariants}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -632,7 +640,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* IMPROVED FEATURES SECTION FOR MOBILE */}
+      {/* Features Section */}
       <section id="features" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-50px' }}>
           <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16">
@@ -652,7 +660,7 @@ export default function HomePage() {
             ].map((feature, idx) => (
               <motion.div
                 key={idx}
-                className="group p-4 sm:p-6 bg-white/90 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                className="group p-4 sm:p-6 bg-white/80 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                 variants={itemVariants}
                 whileHover={{ y: -3 }}
                 initial={{ opacity: 0, y: 20 }}
@@ -660,14 +668,6 @@ export default function HomePage() {
                 transition={{ delay: idx * 0.1 }}
                 viewport={{ once: true, margin: '-30px' }}
               >
-                <motion.div
-                  className={`absolute -top-2 -right-2 sm:-top-4 sm:-right-4 w-12 h-12 sm:w-20 sm:h-20 bg-gradient-to-br ${feature.gradient} opacity-10 rounded-full`}
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    transition: { duration: 8, repeat: Infinity, ease: "linear" }
-                  }}
-                />
-
                 {/* Feature Icon */}
                 <motion.div
                   className={`w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br ${feature.gradient} rounded-xl sm:rounded-2xl flex items-center justify-center mb-3 sm:mb-4 group-hover:scale-105 transition-transform duration-300`}
@@ -685,7 +685,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* IMPROVED TECH STACK SECTION FOR MOBILE */}
+      {/* Tech Stack Section */}
       <section id="tech" className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-50px' }}>
           <motion.div variants={itemVariants} className="text-center mb-12 sm:mb-16">
@@ -724,15 +724,6 @@ export default function HomePage() {
 
                   <h3 className={`text-lg sm:text-xl font-bold ${tech.color} mb-2 text-center`}>{tech.name}</h3>
                   <p className="text-slate-700 text-xs sm:text-sm leading-relaxed text-center">{tech.description}</p>
-
-                  {/* Animated Border */}
-                  <motion.div
-                    className={`absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r ${tech.gradient} group-hover:w-full transition-all duration-500`}
-                    initial={{ width: 0 }}
-                    whileInView={{ width: '100%' }}
-                    transition={{ delay: idx * 0.08 + 0.2, duration: 0.6 }}
-                    viewport={{ once: true }}
-                  />
                 </motion.div>
               </motion.div>
             ))}
@@ -740,7 +731,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* IMPROVED REAL EXAMPLE SECTION FOR MOBILE */}
+      {/* Real Example Section */}
       <section id="example" className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <motion.div variants={containerVariants} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-50px' }}>
           <motion.div variants={itemVariants} className="text-center mb-8 sm:mb-12">
@@ -765,19 +756,14 @@ export default function HomePage() {
               viewport={{ once: true, margin: '-30px' }}
               onClick={handleClientClick}
             >
-              <div className="relative bg-white/90 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 text-center overflow-hidden">
-                <motion.div
-                  className="absolute -top-4 -right-4 w-16 h-16 sm:w-24 sm:h-24 bg-gradient-to-br from-coral-400/20 to-pink-400/20 rounded-full blur-lg"
-                  animate={pulseGlow}
-                />
-
+              <div className="relative bg-white/80 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/60 shadow-lg hover:shadow-xl transition-all duration-300 p-4 sm:p-6 text-center overflow-hidden">
                 {/* Client Avatar */}
                 <motion.div
                   className="relative mx-auto mb-4 sm:mb-6 w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-teal-400 to-cyan-500 p-1.5 sm:p-2 shadow-lg group-hover:shadow-xl transition-all duration-300"
                   whileHover={{ scale: 1.03 }}
                   transition={{ duration: 0.2 }}
                 >
-                  <div className="w-full h-full rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center overflow-hidden">
+                  <div className="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
                     <img
                       src={clientPortfolio.image}
                       alt={clientPortfolio.name}
@@ -834,7 +820,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* IMPROVED FINAL CTA SECTION FOR MOBILE */}
+      {/* Final CTA Section */}
       <section id="view-templates" className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center">
         <motion.div
           className="bg-gradient-to-br from-teal-500 via-coral-500 to-indigo-500 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-white shadow-2xl relative overflow-hidden"
@@ -843,22 +829,6 @@ export default function HomePage() {
           transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
           viewport={{ once: true, margin: '-30px' }}
         >
-          {/* Floating Shapes */}
-          <motion.div
-            className="absolute -top-4 -left-4 w-8 h-8 sm:w-12 sm:h-12 bg-white/10 rounded-full"
-            animate={{
-              y: [0, -15, 0],
-              transition: { duration: 6, repeat: Infinity, ease: "easeInOut" }
-            }}
-          />
-          <motion.div
-            className="absolute -bottom-3 -right-3 w-6 h-6 sm:w-8 sm:w-8 bg-white/10 rotate-45"
-            animate={{
-              scale: [1, 1.2, 1],
-              transition: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }
-            }}
-          />
-          
           <motion.h2
             className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 relative z-10"
             animate={{ scale: [1, 1.02, 1] }}
@@ -889,7 +859,7 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* IMPROVED FOOTER FOR MOBILE */}
+      {/* Footer */}
       <footer className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-center">
         <motion.p
           className="text-slate-700 font-semibold text-sm sm:text-base"
