@@ -43,9 +43,11 @@ import {
   Circle,
   Square,
   Menu,
-  X
+  X,
+  MessageCircle
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 export default function HomePage() {
   const router = useRouter();
@@ -362,14 +364,45 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-white/20" />
       </div>
 
-      {/* CENTERED NAVIGATION */}
+      {/* UPDATED NAVIGATION WITH BALANCED LAYOUT */}
       <motion.nav
         className="relative z-50 p-4 sm:p-6"
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
-        <div className="max-w-7xl mx-auto flex justify-center items-center">
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          {/* Logo Section - Left Side */}
+          <motion.div
+            className="flex items-center"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400 }}
+          >
+            {/* Company Logo */}
+            <motion.div
+              className="w-30 h-16 sm:w-35 sm:h-20 flex items-center justify-center overflow-hidden"
+              whileHover={{ rotate: 360, scale: 1.1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Image
+                src="/images/templates/logoblack.png"
+                alt="Creator Research Logo"
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  const fallback = e.target.nextSibling;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
+              />
+              {/* Fallback logo icon */}
+              <div className="hidden w-full h-full bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl items-center justify-center">
+                <Palette className="w-6 h-6 text-white" />
+              </div>
+            </motion.div>
+          </motion.div>
+
           {/* Desktop Navigation - Centered */}
           <div className="hidden sm:flex items-center space-x-8">
             <motion.button
@@ -398,11 +431,26 @@ export default function HomePage() {
             </motion.button>
           </div>
 
-          {/* Mobile Menu Button - Centered */}
-          <div className="sm:hidden flex justify-center w-full">
+          {/* Contact Button - Right Side */}
+          <div className="hidden sm:flex">
+            <motion.button
+              onClick={() => router.push('/templates')}
+              className="px-6 py-2.5 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              whileHover={{ scale: 1.05, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="flex items-center space-x-2">
+                <MessageCircle className="w-4 h-4" />
+                <span>Get Started</span>
+              </span>
+            </motion.button>
+          </div>
+
+          {/* Mobile Menu Button - Right Side */}
+          <div className="sm:hidden">
             <motion.button
               onClick={toggleMobileMenu}
-              className="px-6 py-3 bg-white/90 backdrop-blur-sm border border-gray-200/70 rounded-xl text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-300"
+              className="px-4 py-2 bg-white/90 backdrop-blur-sm border border-gray-200/70 rounded-xl text-slate-700 font-semibold shadow-sm hover:shadow-md transition-all duration-300"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
             >
@@ -434,6 +482,32 @@ export default function HomePage() {
                 >
                   <X className="w-6 h-6" />
                 </motion.button>
+
+                {/* Logo in Mobile Menu */}
+                <motion.div
+                  className="flex items-center mb-8"
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 flex items-center justify-center overflow-hidden">
+                    <Image
+                      src="/images/templates/logoblack.png"
+                      alt="Creator Research Logo"
+                      width={96}
+                      height={96}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        const fallback = e.target.nextSibling;
+                        if (fallback) fallback.style.display = 'flex';
+                      }}
+                    />
+                    <div className="hidden w-full h-full bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl items-center justify-center">
+                      <Palette className="w-8 h-8 text-white" />
+                    </div>
+                  </div>
+                </motion.div>
 
                 {/* Menu Items */}
                 <motion.button
@@ -881,13 +955,39 @@ export default function HomePage() {
 
       {/* Footer */}
       <footer className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 text-center">
-        <motion.p
-          className="text-slate-700 font-semibold text-sm sm:text-base"
+        <motion.div
+          className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
           animate={{ opacity: [0.7, 1, 0.7] }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         >
-          © {new Date().getFullYear()} Creator Research Pvt.Ltd. All Rights Reserved.
-        </motion.p>
+          {/* Company Logo in Footer */}
+          <motion.div
+            className="flex items-center space-x-3"
+            whileHover={{ scale: 1.05 }}
+          >
+            <div className="w-20 h-12 sm:w-35 sm:h-20 flex items-center justify-center overflow-hidden">
+              <Image
+                src="/images/templates/logoblack.png"
+                alt="Creator Research Logo"
+                width={56}
+                height={56}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  const fallback = e.target.nextSibling;
+                  if (fallback) fallback.style.display = 'flex';
+                }}
+              />
+              <div className="hidden w-full h-full bg-gradient-to-br from-teal-500 to-cyan-500 rounded-lg items-center justify-center">
+                <Palette className="w-4 h-4 text-white" />
+              </div>
+            </div>
+          </motion.div>
+          
+          <span className="text-slate-700 font-semibold text-sm">
+            © {new Date().getFullYear()} Creator Research Pvt.Ltd. All Rights Reserved.
+          </span>
+        </motion.div>
       </footer>
     </div>
   );

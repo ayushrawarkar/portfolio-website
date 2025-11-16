@@ -339,7 +339,7 @@ export default function AllTemplatesPage() {
                                 <Palette className="w-5 h-5 text-white" />
                             </motion.div>
                             <div>
-                                <h1 className="text-xl font-bold text-slate-900">PortfolioCraft</h1>
+                                <h1 className="text-xl font-bold text-slate-900">Creator Research</h1>
                                 <p className="text-xs text-slate-600">All Templates</p>
                             </div>
                         </motion.div>

@@ -365,7 +365,7 @@ export default function TemplatesPage() {
                                 <Palette className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
                             </motion.div>
                             <div className="hidden sm:block">
-                                <h1 className="text-xl font-bold text-slate-900">PortfolioCraft</h1>
+                                <h1 className="text-xl font-bold text-slate-900">Creator Research</h1>
                                 <p className="text-xs text-slate-600">Premium Templates</p>
                             </div>
                             <div className="sm:hidden">
