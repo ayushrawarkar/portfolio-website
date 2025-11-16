@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown, Info, X, Check, Palette, Grid, Sparkles, Menu } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Star, Users, Briefcase, Code, MessageCircle, ChevronLeft, Home, Settings, Zap, Crown, Info, X, Check, Palette, Grid, Sparkles, Menu, ChevronRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ContactForm from '@/components/ContactForm';
@@ -261,6 +261,11 @@ export default function TemplatesPage() {
 
     const toggleMobileMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
+
+    // Function to navigate to all templates page
+    const handleExploreMoreTemplates = () => {
+        router.push('/all-templates'); // Navigate to your existing all-templates page
     };
 
     // Animation variants
@@ -618,7 +623,32 @@ export default function TemplatesPage() {
                     ))}
                 </motion.div>
 
-                {/* Rest of your existing code for custom packages section... */}
+                {/* Explore More Templates Button */}
+                <motion.div 
+                    className="text-center mt-8 sm:mt-12"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
+                    viewport={{ once: true }}
+                >
+                    <motion.button
+                        onClick={handleExploreMoreTemplates}
+                        className="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-200 border border-teal-500/20 shadow-lg"
+                        whileHover={{ 
+                            scale: 1.05, 
+                            boxShadow: "0 10px 25px -5px rgba(20, 184, 166, 0.4)" 
+                        }}
+                        whileTap={{ scale: 0.98 }}
+                    >
+                        <Grid className="w-5 h-5 mr-3" />
+                        <span className="text-base">Explore More Templates</span>
+                        <ChevronRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-200" />
+                    </motion.button>
+                    <p className="text-slate-600 mt-3 text-sm">
+                        Discover our complete collection of portfolio templates
+                    </p>
+                </motion.div>
+
                 {/* Custom Development Section */}
                 <motion.section
                     className="mt-8 sm:mt-12 lg:mt-16"
