@@ -334,17 +334,31 @@ export default function TemplatesPage() {
         }
     };
 
+    // Simple text color animation variants
+    const textColorVariants = {
+        animate: {
+            backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+            transition: {
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-cyan-50/10 to-teal-50/10 overflow-hidden">
-            {/* Simplified Background Elements */}
-            <div className="fixed inset-0 pointer-events-none">
-                <div className="absolute top-20 left-10 w-64 h-64 bg-gradient-to-r from-teal-400/10 to-cyan-400/10 rounded-full blur-xl" />
-                <div className="absolute bottom-20 right-10 w-80 h-80 bg-gradient-to-r from-coral-400/5 to-pink-400/5 rounded-full blur-xl" />
+        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-cyan-50/30 overflow-hidden relative">
+            {/* Simple Background Elements - No heavy animations */}
+            <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+                {/* Static gradient orbs */}
+                <div className="absolute top-1/4 -left-20 w-96 h-96 bg-gradient-to-r from-teal-400/20 to-cyan-400/20 rounded-full blur-3xl" />
+                <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-gradient-to-r from-coral-400/20 to-pink-400/20 rounded-full blur-3xl" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-r from-indigo-400/15 to-purple-400/15 rounded-full blur-3xl" />
             </div>
 
             {/* IMPROVED MOBILE HEADER */}
             <motion.header
-                className="relative z-50 py-4 px-4 sm:px-6 bg-white/80 backdrop-blur-md border-b border-gray-200/50"
+                className="relative z-50 py-4 px-4 sm:px-6 bg-white/90 backdrop-blur-lg border-b border-gray-200/50 shadow-sm"
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.6, ease: "easeOut" }}
@@ -424,7 +438,7 @@ export default function TemplatesPage() {
                     <AnimatePresence>
                         {isMobileMenuOpen && (
                             <motion.div
-                                className="sm:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg"
+                                className="sm:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-lg border-b border-gray-200 shadow-lg"
                                 initial="closed"
                                 animate="open"
                                 exit="closed"
@@ -455,13 +469,14 @@ export default function TemplatesPage() {
                         )}
                     </AnimatePresence>
 
-                    {/* Page Title Section - Improved for mobile */}
+                    {/* SIMPLIFIED HERO SECTION WITH ONLY TEXT COLOR ANIMATION */}
                     <motion.div
                         className="text-center mt-6 mb-4 sm:mt-8 sm:mb-6 px-2"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3, duration: 0.5 }}
                     >
+                        {/* Simple badge */}
                         <motion.div
                             className="inline-flex items-center space-x-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-white/80 rounded-full border border-slate-200 shadow-sm mb-3 sm:mb-4"
                             initial={{ scale: 0.9, opacity: 0 }}
@@ -472,12 +487,28 @@ export default function TemplatesPage() {
                             <span className="text-xs sm:text-sm font-medium text-slate-700">Premium Portfolio Templates</span>
                         </motion.div>
                         
-                        <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-3 sm:mb-4">
-                            Choose Your
-                            <span className="block bg-gradient-to-r from-teal-600 via-coral-600 to-indigo-600 bg-clip-text text-transparent">
+                        {/* Main heading with animated gradient text - FIXED SYNTAX */}
+                        <div className="mb-3 sm:mb-4">
+                            <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-2">
+                                Choose Your
+                            </h1>
+                            
+                            {/* Animated gradient text */}
+                            <motion.div
+                                className="text-2xl sm:text-4xl lg:text-5xl font-bold"
+                                variants={textColorVariants}
+                                animate="animate"
+                                style={{
+                                    background: 'linear-gradient(90deg, #0d9488, #ec4899, #4f46e5, #0d9488)',
+                                    backgroundSize: '400% 400%',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    backgroundClip: 'text',
+                                }}
+                            >
                                 Perfect Design
-                            </span>
-                        </h1>
+                            </motion.div>
+                        </div>
                         
                         <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed px-2">
                             Discover professionally crafted portfolio templates designed to showcase your work in the best light.
@@ -486,6 +517,7 @@ export default function TemplatesPage() {
                 </div>
             </motion.header>
 
+            {/* Rest of the component remains exactly the same as in the previous working version */}
             {/* Templates Grid */}
             <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-4">
                 <motion.div
